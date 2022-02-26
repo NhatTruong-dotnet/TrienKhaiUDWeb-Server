@@ -24,6 +24,6 @@ app.use(helmet());
 
 app.use("/api/conversations", authRoute);
 
-app.listen(80, () => {
+app.listen(3000, () => {
   console.log("Backend server is running!");
 });
