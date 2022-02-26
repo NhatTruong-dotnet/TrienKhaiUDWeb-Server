@@ -6,7 +6,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const multer = require("multer");
 const authRoute = require("./routes/conversations");
-
+const port = process.env.PORT || 3000
 dotenv.config();
 
 mongoose.connect(
@@ -24,6 +24,7 @@ app.use(helmet());
 
 app.use("/api/conversations", authRoute);
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log("Backend server is running!");
+  console.log(port);
 });
