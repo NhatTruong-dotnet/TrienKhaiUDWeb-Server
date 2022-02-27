@@ -11,4 +11,4 @@ const SalesVoucherSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("SalesVoucher", SalesVoucherSchema);
+module.exports = mongoose.model("SalesVoucher", SalesVoucherSchema,"SalesVoucher");

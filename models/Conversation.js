@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const MessageSchema = new mongoose.Schema({gmail: String, messageText:String, chatTime:{Date,  default: Date.now}})
+const MessageSchema = new mongoose.Schema({gmail: String, messageText:String, chatTime:{type:Date,  default: Date.now}})
 
 const ConversationSchema = new mongoose.Schema(
   {
@@ -9,4 +9,4 @@ const ConversationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Conversations", ConversationSchema);
+module.exports = mongoose.model("Conversations", ConversationSchema,"Conversations");
