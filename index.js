@@ -6,7 +6,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const multer = require("multer");
 const conversationRoute = require("./routes/conversations");
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3030
 dotenv.config();
 
 mongoose.connect(
