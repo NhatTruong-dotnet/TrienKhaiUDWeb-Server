@@ -5,8 +5,9 @@ const dotenv = require("dotenv");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const multer = require("multer");
+const cors = require("cors");
 const conversationRoute = require("./routes/conversations");
-const port = process.env.PORT || 3030
+const port = process.env.PORT || 3030;
 dotenv.config();
 
 mongoose.connect(
@@ -17,11 +18,14 @@ mongoose.connect(
   }
 );
 
-
 //middleware
 app.use(express.json());
 app.use(helmet());
-
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use("/api/conversations", conversationRoute);
 
 app.listen(port, () => {
