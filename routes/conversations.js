@@ -35,6 +35,7 @@ router.post("/:gmail", async (req, res) => {
         gmail: req.body.gmail,
         messages: [
           {
+            gmail:req.body.gmail,
             messageText: req.body.messageText,
           },
         ],
