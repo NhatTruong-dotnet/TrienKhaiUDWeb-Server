@@ -14,26 +14,32 @@ router.get("/:gmail", async (req, res) => {
 
 router.post("/:gmail", async (req, res) => {
   try {
-    const newMessage = {
+    let newMessage = {
       gmail: req.body.gmail,
       messageText: req.body.messageText,
     };
     const conversation = await Conversation.find({
       gmail: req.params.gmail,
     });
-    if(conversation.length != 0){
+    if (conversation.length != 0) {
       var savedConversation = await Conversation.updateOne(
         {
           gmail: req.params.gmail,
         },
         { $push: { messages: newMessage } }
       );
-      console.log('updated');
+      console.log("updated");
       res.status(200).json(savedConversation);
-    }
-    else{
-      console.log('insert');
-      var newConversations = await Conversation.insertMany(newMessage);
+    } else {
+      let newMessage = {
+        gmail: req.body.gmail,
+        messages: [
+          {
+            messageText: req.body.messageText,
+          },
+        ],
+      };
+      var newConversations = await Conversation.create(newMessage);
       res.status(200).json(newConversations);
     }
   } catch (error) {
