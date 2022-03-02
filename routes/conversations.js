@@ -49,4 +49,14 @@ router.post("/:gmail", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const conversation = await Conversation.find({});
+    res.status(200).json(conversation);
+  } catch (error) {
+    res.status(500).json(err);
+  }
+});
+
+
 module.exports = router;
