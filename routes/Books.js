@@ -3,48 +3,53 @@ const Book = require("../models/Book");
 
 router.get("/", async (req, res) => {
   try {
-    if(req.body.translator == ""){
-      const books = await Book.find({
-        translator: req.body.translator
-      });
-      res.status(200).json(books);
-    }else if(req.body.translator){
-      const books = await Book.find({
-        translator: req.body.translator
-      });
+    // if(req.body.translator == ""){
+    //   const books = await Book.find({
+    //     translator: req.body.translator
+    //   });
+    //   res.status(200).json(books);
+    // }else if(req.body.translator){
+    //   const books = await Book.find({
+    //     translator: req.body.translator
+    //   });
     
-      res.status(200).json(books);
-    }
-    if(req.body.name)
-    {
+    //   res.status(200).json(books);
+    // }
+    // if(req.body.name)
+    // {
+    //   const books = await Book.find({
+    //     name: req.body.name
+    //   });
+    //   res.status(200).json(books);
+    // }
+    // if(req.body.price)
+    // {
+    //   const books = await Book.find({
+    //     price: req.body.price
+    //   });
+    //   res.status(200).json(books);
+    // }
+    // if(req.body.author)
+    // {
+    //   const books = await Book.find({
+    //     author: req.body.author
+    //   });
+    //   res.status(200).json(books);
+    // }
+    // if(req.body.publishYear)
+    // {
+    //   const books = await Book.find({
+    //     publishYear: req.body.publishYear
+    //   });
+    //   res.status(200).json(books);
+    // }
+    // else{
       const books = await Book.find({
-        name: req.body.name
+       
       });
       res.status(200).json(books);
     }
-    if(req.body.price)
-    {
-      const books = await Book.find({
-        price: req.body.price
-      });
-      res.status(200).json(books);
-    }
-    if(req.body.author)
-    {
-      const books = await Book.find({
-        author: req.body.author
-      });
-      res.status(200).json(books);
-    }
-    if(req.body.publishYear)
-    {
-      const books = await Book.find({
-        publishYear: req.body.publishYear
-      });
-      res.status(200).json(books);
-    }
-
-  } catch (error) {
+ catch (error) {
     res.status(500).json(err);
   }
 });
