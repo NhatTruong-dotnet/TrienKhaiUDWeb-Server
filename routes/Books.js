@@ -1,76 +1,58 @@
 const router = require("express").Router();
 const Book = require("../models/Book");
 
-router.get("/", async (req, res) => {
+router.get("/:name", async (req, res) => {
   try {
-    // if(req.body.translator == ""){
-    //   const books = await Book.find({
-    //     translator: req.body.translator
-    //   });
-    //   res.status(200).json(books);
-    // }else if(req.body.translator){
-    //   const books = await Book.find({
-    //     translator: req.body.translator
-    //   });
-    
-    //   res.status(200).json(books);
-    // }
-    // if(req.body.name)
-    // {
-    //   const books = await Book.find({
-    //     name: req.body.name
-    //   });
-    //   res.status(200).json(books);
-    // }
-    // if(req.body.price)
-    // {
-    //   const books = await Book.find({
-    //     price: req.body.price
-    //   });
-    //   res.status(200).json(books);
-    // }
-    // if(req.body.author)
-    // {
-    //   const books = await Book.find({
-    //     author: req.body.author
-    //   });
-    //   res.status(200).json(books);
-    // }
-    // if(req.body.publishYear)
-    // {
-    //   const books = await Book.find({
-    //     publishYear: req.body.publishYear
-    //   });
-    //   res.status(200).json(books);
-    // }
-    // else{
       const books = await Book.find({
-       
+        name: req.params.name
       });
-      res.status(200).json(books);
+      res.status(200).json(books); 
     }
  catch (error) {
     res.status(500).json(err);
   }
 });
+// if(req.body.translator == ""){
+//   const books = await book.find({
+//     translator: req.body.translator
+//   });
+//   res.status(200).json(books);
+// }else if(req.body.translator){
+//   const books = await book.find({
+//     translator: req.body.translator
+//   });
 
-// router.post("/:gmail", async (req, res) => {
-//   try {
-//     const newMessage = {
-//       gmail: req.body.gmail,
-//       messageText: req.body.messageText,
-//     };
-//     var savedConversation = await Conversation.updateOne(
-//       {
-//         gmail: req.params.gmail,
-//       },
-//       { $push: { messages: newMessage } }
-//     );
-//     res.status(200).json(savedConversation);
-//   } catch (error) {
-//     res.status(500).json(error);
-//     console.log(error);
-//   }
-// });
+//   res.status(200).json(books);
+// }
+// if(req.body.name)
+// {
+//   const books = await book.find({
+//     name: req.body.name
+//   });
+//   res.status(200).json(books);
+// }
+// if(req.body.price)
+// {
+//   const books = await book.find({
+//     price: req.body.price
+//   });
+//   res.status(200).json(books);
+// }
+// if(req.body.author)
+// {
+//   const books = await book.find({
+//     author: req.body.author
+//   });
+//   res.status(200).json(books);
+// }
+// if(req.body.publishyear)
+// {
+//   const books = await book.find({
+//     publishyear: req.body.publishyear
+//   });
+//   res.status(200).json(books);
+// }
+
+// }
 
 module.exports = router;
