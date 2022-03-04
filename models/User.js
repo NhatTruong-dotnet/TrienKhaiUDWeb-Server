@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const shippingAddressSchema = new mongoose.Schema({isDefault:{type:Boolean, default:false}, address:Number});
 const addedPointLogSchema = new mongoose.Schema({billID:String, addedPoint: Number});
 const seenItemSchema = new mongoose.Schema({bookId:String});
-const previewItemSchema = new mongoose.Schema({ratingValue:Number, comment:String, bookId:String});
 
 const UserSchema = new mongoose.Schema(
   {
@@ -14,7 +13,6 @@ const UserSchema = new mongoose.Schema(
     addedPointLogs:[addedPointLogSchema],
     currentPoint:Number,
     seenList:[seenItemSchema],
-    preview:[previewItemSchema]
   },
   { timestamps: true }
 );
