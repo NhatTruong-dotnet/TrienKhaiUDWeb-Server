@@ -11,10 +11,11 @@ const conversationRoute = require("./routes/conversations");
 const userRoute = require("./routes/user");
 const bookRoute = require("./routes/book");
 const orderRoute = require("./routes/order");
+const cartRoute = require("./routes/carts");
 
-const port = process.env.PORT || 3000
-const cartRoute = require("./routes/carts")
-const port = process.env.PORT || 3030;
+const port = process.env.PORT || 3000;
+
+// const port = process.env.PORT || 3030;
 dotenv.config();
 
 mongoose.connect(
@@ -36,13 +37,10 @@ app.use("/api/conversations", conversationRoute);
 app.use("/api/user", userRoute);
 app.use("/api/book", bookRoute);
 app.use("/api/order", orderRoute);
+app.use("/api/carts", cartRoute);
+
 
 app.listen(port, () => {
     console.log("Backend server is running!");
     console.log("localhost:" + port);
-});
-app.use("/api/carts", cartRoute);
-app.listen(port, () => {
-    console.log("Backend server is running!");
-    console.log(port);
 });
