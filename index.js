@@ -8,6 +8,10 @@ const multer = require("multer");
 const cors = require("cors");
 const conversationRoute = require("./routes/conversations");
 const BooksRoute = require("./routes/Books");
+const PriceRouter = require("./routes/Price");
+const publisherRouter = require("./routes/publisher");
+const suppilerRouter = require("./routes/suppiler");
+
 const CartRoute = require("./routes/carts");
 const port = process.env.PORT || 3030;
 dotenv.config();
@@ -30,7 +34,10 @@ app.use(
 );
 app.use("/api/conversations", conversationRoute);
 app.use("/api/Books", BooksRoute);
-app.use("/api/carts", CartRoute);
+app.use("/api/Books/price", PriceRouter);
+app.use("/api/Books/publisher", publisherRouter);
+app.use("/api/Books/suppiler", suppilerRouter);
+app.use("/api/carts", CartRoute); 
 app.listen(port, () => {
   console.log("Backend server is running!");
   console.log(port);
