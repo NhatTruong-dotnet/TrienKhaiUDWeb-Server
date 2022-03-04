@@ -1,10 +1,9 @@
 const router = require("express").Router();
 const Orders = require("../models/Order");
 const Users = require("../models/User");
-const store = require("store")
+const store = require("store");
 router.get("/:gmail", async (req, res) => {
   try {
-     
     const order = await Orders.find({
       gmail: req.params.gmail,
       isCheckout: false,
@@ -24,41 +23,38 @@ router.post("/:gmail", async (req, res) => {
     };
 
     const userInfo = await Users.find({
-        gmail: req.params.gmail
-      })
-        const order = await Orders.find({
-            gmail: req.params.gmail,
-            isCheckout: false,
-          });
-          if (order.length != 0) {
-            var savedOrders = await Orders.updateOne(
-              {
-                gmail: req.params.gmail,
-                isCheckout: false,
-              },
-              { $push: { orderList: newOrder } }
-            );
-            console.log("updated");
-            res.status(200).json(savedOrders);
-          } else {
-            console.log("inserted");
-            let newOrder = {
-              gmail: req.params.gmail,
-              orderList: [
-                {
-                  bookId: req.body.bookId,
-                  price: req.body.price,
-                  amount: req.body.amount,
-                },
-              ],
-            };
-            var newOrderSaved = await Orders.create(newOrder);
-            res.status(200).json(newOrderSaved);
-          }
+      gmail: req.params.gmail,
+    });
+    const order = await Orders.find({
+      gmail: req.params.gmail,
+      isCheckout: false,
+    });
+    if (order.length != 0) {
+      var savedOrders = await Orders.updateOne(
+        {
+          gmail: req.params.gmail,
+          isCheckout: false,
+        },
+        { $push: { orderList: newOrder } }
+      );
+      console.log("updated");
+      res.status(200).json(savedOrders);
+    } else {
+      console.log("inserted");
+      let newOrder = {
+        gmail: req.params.gmail,
+        orderList: [
+          {
+            bookId: req.body.bookId,
+            price: req.body.price,
+            amount: req.body.amount,
+          },
+        ],
+      };
+      var newOrderSaved = await Orders.create(newOrder);
+      res.status(200).json(newOrderSaved);
     }
-
-   
-   catch (error) {
+  } catch (error) {
     res.status(500).json(error);
     console.log(error);
   }
@@ -79,23 +75,25 @@ router.get("/", async (req, res) => {
 
 router.put("/:gmail", async (req, res) => {
   try {
-
-    const order = await Orders.find({
+    const currentCart = await Orders.find({
       gmail: req.params.gmail,
       isCheckout: false,
     });
-    if (order.length != 0) {
-      var savedOrders = await Orders.findOne({
+    if (currentCart.length != 0) {
+      var cartInDB = await Orders.find({
         gmail: req.params.gmail,
         isCheckout: false,
+      }).then((cart) => {
+        //https://stackoverflow.com/questions/15691224/mongoose-update-values-in-array-of-objects
+        cart[0].orderList.map((cartItem) => {
+          if (cartItem.bookId === req.body.bookId) {
+            cartItem.price = req.body.price;
+            cartItem.amount = req.body.amount;
+          }
+        });
+        cart[0].save(cartInDB);
       });
-      savedOrders.orderList.map((order) => {
-        if (order.bookId === req.body.bookId) {
-          order.price = req.body.price;
-          order.amount = req.body.amount
-        }
-      });
-      res.status(200).json(savedOrders);
+      res.status(200).json();
     }
   } catch (error) {
     res.status(500).json(error);
