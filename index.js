@@ -36,6 +36,16 @@ app.use("/api/carts", CartRoute);
 app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
 
+const io = require("socket.io")(8900,{
+  cors:{
+      origin:"*"
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+})
+
 app.listen(port, () => {
   console.log("Backend server is running!");
   console.log(port);
