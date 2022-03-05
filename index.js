@@ -8,9 +8,11 @@ const multer = require("multer");
 const cors = require("cors");
 const conversationRoute = require("./routes/conversations");
 const BooksRoute = require("./routes/Books");
-const PriceRouter = require("./routes/Price");
-const publisherRouter = require("./routes/publisher");
-const suppilerRouter = require("./routes/suppiler");
+const PriceRouter = require("./routes/Search-Price");
+const publisherRouter = require("./routes/Search-Publisher");
+const suppilerRouter = require("./routes/Search-Suppiler");
+const translatorRouter = require("./routes/Search-Translator");
+
 
 const CartRoute = require("./routes/carts");
 const port = process.env.PORT || 3030;
@@ -34,9 +36,11 @@ app.use(
 );
 app.use("/api/conversations", conversationRoute);
 app.use("/api/Books", BooksRoute);
-app.use("/api/Books/price", PriceRouter);
-app.use("/api/Books/publisher", publisherRouter);
-app.use("/api/Books/suppiler", suppilerRouter);
+app.use("/api/Books/Search-Price", PriceRouter);
+app.use("/api/Books/Search-Publisher", publisherRouter);
+app.use("/api/Books/Search-Suppiler", suppilerRouter);
+app.use("/api/Books/Search-Translator", translatorRouter);
+
 app.use("/api/carts", CartRoute); 
 app.listen(port, () => {
   console.log("Backend server is running!");
