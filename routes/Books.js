@@ -24,12 +24,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/review/:name", async (req, res) => {
+router.get("/review/:id", async (req, res) => {
   try {
-      const books = await Book.find({
-        name: req.params.name
-      });
-      res.status(200).json(books); 
+      const books = await Book.findById(req.params.name);
+      res.status(200).json(books.rating); 
     }
  catch (error) {
     res.status(500).json(err);
