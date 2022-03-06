@@ -81,12 +81,14 @@ router.post("/:gmail", async(req, res) => {
 
 router.get("/", async(req, res) => {
     try {
-        if (req.body.gmail == "admin@gmail.com") {
-            const orders = await Orders.find({});
-            res.status(200).json(orders);
-        } else {
-            res.status(404).json("Not have permission");
-        }
+        const orders = await Orders.find({});
+        res.status(200).json(orders);
+        // if (req.body.gmail == "admin@gmail.com") {
+        //     const orders = await Orders.find({});
+        //     res.status(200).json(orders);
+        // } else {
+        //     res.status(404).json("Not have permission");
+        // }
     } catch (error) {
         res.status(500).json(error);
     }

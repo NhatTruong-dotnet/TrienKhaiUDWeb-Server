@@ -14,10 +14,7 @@ const orderRoute = require("./routes/order");
 const cartRoute = require("./routes/carts");
 
 const bodyParser = require("body-parser");
-const conversationRoute = require("./routes/conversations");
-const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
-const cors = require("cors");
 const BooksRoute = require("./routes/Books");
 const PriceRouter = require("./routes/Search-Price");
 const publisherRouter = require("./routes/Search-Publisher");
@@ -85,10 +82,4 @@ app.listen(port, () => {
         console.log("a user connected");
     })
 
-    app.use("/api/carts", CartRoute);
-    app.listen(port, () => {
-        console.log("Backend server is running!");
-        console.log(port);
-
-    });
 });

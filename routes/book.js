@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { ObjectId } = require("bson");
 const { crossOriginResourcePolicy } = require("helmet");
 const Books = require("../models/Book");
 const User = require("../models/User");
@@ -98,48 +99,40 @@ router.post("/:_id", async(req, res) => {
 });
 
 router.put("/:_id", async(req, res) => {
-
     try {
-        var book = await Books.find({
+        const currentBook = await Books.find({
             _id: req.params._id,
         });
-
-        // var ratingUser;
-        var ratingList = [];
-        book.forEach(item => {
-            var ratings = item.rating;
-            ratings.forEach((r) => {
-                if (r.gmail == req.body.gmail) {
-                    r.ratingValue = req.body.ratingValue;
-                    // ratingUser = r;
+        if (currentBook.length != 0) {
+            var bookC = await Books.find({
+                _id: req.params._id,
+            }).then((b) => {
+                try {
+                    b.forEach((c) => {
+                        c.rating.map((item) => {
+                            if (item.gmail === req.body.gmail) {
+                                item.ratingValue = req.body.ratingValue;
+                            }
+                        });
+                        c.save(bookC);
+                    });
+                } catch (error) {
+                    // console.log(error);
+                    res.status(500).json("{'status': 500,'message': ' Update Failed '}");
                 }
-                ratingList.push(r);
-            })
-
-        });
-
-        var upAt = new Date();
-        var timestemp = upAt.getTime();
-        var where = "{ '_id':" + req.params._id + "}";
-        var setUpdate = "{'rating': " + ratingList + "}";
-
-        console.log("setUpdate:", setUpdate);
-        Books.updateOne(where, {
-                $set: setUpdate,
-                upsert: true
-            },
-            (error, success) => {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log("Hello success");
-                }
-            }
-        );
-        res.status(200).json(book);
+            });
+            const cb = await Books.find({
+                _id: req.params._id,
+            });
+            // res.status(200).json(cb);
+            res.status(200).json("{'status': 200,'message': 'Updated success '}");
+        } else {
+            res.status(404).json("{'status': 404,'message': ' _id not exists '}");
+        }
 
     } catch (error) {
-        res.status(500).json(error);
+
+        res.status(500).json("{'status': 500,'message': ' Update Failed '}");
     }
 
 });
