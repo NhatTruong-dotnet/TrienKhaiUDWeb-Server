@@ -12,13 +12,20 @@ router.get("/:translator", async (req, res) => {
     res.status(500).json(err);
   }
 });
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-      const books = await Book.find({});
-      res.status(200).json(books); 
+    if(req.body.translator==""){
+      const books = await Book.find({
+        translator: req.body.translator
+      });
+
+      res.status(200).json(books);  
+    }
+    
     }
  catch (error) {
-    res.status(500).json(err);
+    res.st
+    atus(500).json(err);
   }
 });
 module.exports = router;
