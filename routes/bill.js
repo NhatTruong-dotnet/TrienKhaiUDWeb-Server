@@ -2,7 +2,6 @@ const router = require("express").Router();
 const Bills = require("../models/Bill");
 const sendMail = require("../common/email");
 const Orders = require("../models/Order");
-import '../common/invoice/invoice.css'
 router.get("/:gmail", async (req, res) => {
   // get toàn bộ đơn hàng của user
     try {
