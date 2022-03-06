@@ -12,7 +12,7 @@ router.get("/:name", async (req, res) => {
     res.status(500).json(err);
   }
 });
-router.post("/", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
       const books = await Book.find({});
       

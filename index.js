@@ -42,19 +42,19 @@ app.use("/api/Books/Search-Price", PriceRouter);
 app.use("/api/Books/Search-Publisher", publisherRouter);
 app.use("/api/Books/Search-Suppiler", suppilerRouter);
 app.use("/api/Books/Search-Translator", translatorRouter);
-app.use("/api/carts", CartRoute);
-app.use("/api/bills", BillRoute);
-app.use("/api/seenList", SeenList);
+// app.use("/api/carts", CartRoute);
+// app.use("/api/bills", BillRoute);
+// app.use("/api/seenList", SeenList);
 
-const io = require("socket.io")(8900,{
-  cors:{
-      origin:"*"
-  }
-});
+// const io = require("socket.io")(8900,{
+//   cors:{
+//       origin:"*"
+//   }
+// });
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
-})
+// io.on("connection", (socket) => {
+//   console.log("a user connected");
+// })
 
 
 
