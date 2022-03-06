@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Orders = require("../models/Order");
 const Users = require("../models/User");
-const store = require("store");
+// const store = require("store");
 router.get("/:gmail", async(req, res) => {
     try {
         const order = await Orders.find({
@@ -139,10 +139,11 @@ router.put("/:gmail", async(req, res) => {
                 });
                 cart[0].save(cartInDB);
             });
-            res.status(200).json();
+            res.status(200).json(currentCart);
         }
     } catch (error) {
-        res.status(500).json();
+        res.status(500).json(error);
+
     }
 });
 
