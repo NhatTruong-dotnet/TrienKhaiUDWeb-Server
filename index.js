@@ -9,7 +9,6 @@ const bodyParser = require("body-parser");
 const conversationRoute = require("./routes/conversations");
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
-const port = process.env.PORT || 3000
 const cors = require("cors");
 const conversationRoute = require("./routes/conversations");
 const BooksRoute = require("./routes/Books");
@@ -17,8 +16,6 @@ const PriceRouter = require("./routes/Search-Price");
 const publisherRouter = require("./routes/Search-Publisher");
 const suppilerRouter = require("./routes/Search-Suppiler");
 const translatorRouter = require("./routes/Search-Translator");
-
-
 const CartRoute = require("./routes/carts");
 const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
