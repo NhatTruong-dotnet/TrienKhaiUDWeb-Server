@@ -20,6 +20,7 @@ router.post("/:gmail", async (req, res) => {
       bookId: req.body.bookId,
       price: req.body.price,
       amount: req.body.amount,
+      bookName: req.body.bookName
     };
 
     const userInfo = await Users.find({
