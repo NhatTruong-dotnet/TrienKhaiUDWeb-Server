@@ -3,8 +3,6 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
-const morgan = require("morgan");
-const multer = require("multer");
 const bodyParser = require("body-parser");
 const conversationRoute = require("./routes/conversations");
 const userRoute = require("./routes/users");
@@ -65,8 +63,6 @@ const io = require("socket.io")(8900,{
 io.on("connection", (socket) => {
   console.log("a user connected");
 })
-
-
 
 app.use("/api/carts", CartRoute); 
 app.listen(port, () => {

@@ -4,8 +4,10 @@ const BillSchema = new mongoose.Schema(
   {
     orderId: String,
     isDelivery: {type:Boolean, default: false},
+    isSucessful: {type:Boolean, default: false},
     paymentMethod:String,
-    totalPayment: Number
+    totalPayment: Number,
+    gmail: String
   },
   { timestamps: true }
 );
