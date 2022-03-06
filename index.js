@@ -10,7 +10,6 @@ const conversationRoute = require("./routes/conversations");
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const cors = require("cors");
-const conversationRoute = require("./routes/conversations");
 const BooksRoute = require("./routes/Books");
 const PriceRouter = require("./routes/Search-Price");
 const publisherRouter = require("./routes/Search-Publisher");
