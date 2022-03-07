@@ -40,11 +40,9 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/api/conversations", conversationRoute);
 //APIs Info User
 
 //APIs Login/Register Account
-app.use("/api/auth", authRoute);
 app.use(
     cors({
         origin: "*",
@@ -63,20 +61,12 @@ app.use("/api/Books/Search-Translator", translatorRouter);
 app.use("/api/carts", CartRoute);
 app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
+app.use("/api/conversations", conversationRoute);
+app.use("/api/auth", authRoute);
 
 
 app.listen(port, () => {
     console.log("Backend server is running!");
     console.log("localhost:" + port);
-
-    const io = require("socket.io")(8900, {
-        cors: {
-            origin: "*"
-        }
-    });
-
-    io.on("connection", (socket) => {
-        console.log("a user connected");
-    })
 
 });
