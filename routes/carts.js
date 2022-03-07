@@ -114,7 +114,7 @@ router.put("/:gmail", async (req, res) => {
   }
 });
 
-router.delete("/:gmail/bookId", async (req, res) => {
+router.delete("/:gmail/:bookId", async (req, res) => {
   try {
     let newOrder = {
       bookId: req.params.bookId,
