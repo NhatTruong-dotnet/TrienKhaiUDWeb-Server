@@ -6,10 +6,8 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const multer = require("multer");
 const cors = require("cors");
-
 const conversationRoute = require("./routes/conversations");
-const userRoute = require("./routes/user");
-const bookRoute = require("./routes/book");
+const ratingCommentRoute = require("./routes/rating-comment");
 const orderRoute = require("./routes/order");
 const cartRoute = require("./routes/carts");
 
@@ -44,7 +42,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/conversations", conversationRoute);
 //APIs Info User
-app.use("/api/users", userRoute);
+
 //APIs Login/Register Account
 app.use("/api/auth", authRoute);
 app.use(
@@ -54,8 +52,7 @@ app.use(
 );
 app.use("/api/conversations", conversationRoute);
 
-app.use("/api/user", userRoute);
-app.use("/api/book", bookRoute);
+app.use("/api/rating-comment", ratingCommentRoute);
 app.use("/api/order", orderRoute);
 
 app.use("/api/Books", BooksRoute);
