@@ -12,6 +12,7 @@ const PriceRouter = require("./routes/Search-Price");
 const publisherRouter = require("./routes/Search-Publisher");
 const suppilerRouter = require("./routes/Search-Suppiler");
 const translatorRouter = require("./routes/Search-Translator");
+const SearchAllRouter = require("./routes/Search");
 
 
 const CartRoute = require("./routes/carts");
@@ -37,11 +38,13 @@ app.use(
   })
 );
 app.use("/api/conversations", conversationRoute);
-app.use("/api/Books", BooksRoute);
+
 app.use("/api/Books/Search-Price", PriceRouter);
 app.use("/api/Books/Search-Publisher", publisherRouter);
 app.use("/api/Books/Search-Suppiler", suppilerRouter);
 app.use("/api/Books/Search-Translator", translatorRouter);
+app.use("/api/Books/Search", SearchAllRouter);
+app.use("/api/Books", BooksRoute);
 // app.use("/api/carts", CartRoute);
 // app.use("/api/bills", BillRoute);
 // app.use("/api/seenList", SeenList);
