@@ -24,6 +24,32 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+router.get("/delete/:_id", async (req, res) => {
+  try {
+      const books = await Book.deleteOne({_id: req.params._id });
+      console.log("Deleted");
+      res.status(200).json(books); 
+    }
+ catch (error) {
+    res.status(500).json(err);
+  }
+});
+
+router.get("/insert/", async (req, res) => {
+  try {
+      const books = await Book.insertOne({
+        name: req.body.name ,
+      });
+      console.log("Inserted");
+      res.status(200).json(books); 
+    }
+ catch (error) {
+    res.status(500).json(err);
+  }
+});
+
+
 router.get("/review/:id", async (req, res) => {
   try {
       const books = await Book.findById(req.params.name);

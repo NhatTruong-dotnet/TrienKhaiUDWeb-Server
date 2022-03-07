@@ -13,12 +13,9 @@ const PriceRouter = require("./routes/Search-Price");
 const publisherRouter = require("./routes/Search-Publisher");
 const suppilerRouter = require("./routes/Search-Suppiler");
 const translatorRouter = require("./routes/Search-Translator");
-<<<<<<< HEAD
 const SearchAllRouter = require("./routes/Search");
 
 
-=======
->>>>>>> Master
 const CartRoute = require("./routes/carts");
 const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
@@ -56,12 +53,19 @@ app.use("/api/Books/Search-Price", PriceRouter);
 app.use("/api/Books/Search-Publisher", publisherRouter);
 app.use("/api/Books/Search-Suppiler", suppilerRouter);
 app.use("/api/Books/Search-Translator", translatorRouter);
-<<<<<<< HEAD
 app.use("/api/Books/Search", SearchAllRouter);
+
 app.use("/api/Books", BooksRoute);
 // app.use("/api/carts", CartRoute);
 // app.use("/api/bills", BillRoute);
 // app.use("/api/seenList", SeenList);
+
+// io.on("connection", (socket) => {
+//   console.log("a user connected");
+// })
+app.use("/api/carts", CartRoute);
+app.use("/api/bills", BillRoute);
+app.use("/api/seenList", SeenList);
 
 // const io = require("socket.io")(8900,{
 //   cors:{
@@ -72,21 +76,6 @@ app.use("/api/Books", BooksRoute);
 // io.on("connection", (socket) => {
 //   console.log("a user connected");
 // })
-=======
-app.use("/api/carts", CartRoute);
-app.use("/api/bills", BillRoute);
-app.use("/api/seenList", SeenList);
->>>>>>> Master
-
-const io = require("socket.io")(8900,{
-  cors:{
-      origin:"*"
-  }
-});
-
-io.on("connection", (socket) => {
-  console.log("a user connected");
-})
 
 app.use("/api/carts", CartRoute); 
 app.listen(port, () => {
