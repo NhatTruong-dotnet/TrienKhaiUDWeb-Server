@@ -131,7 +131,7 @@ router.delete("/:gmail/:bookId", async (req, res) => {
         },
         {
           $pull: {
-            orderList: { bookId: req.body.bookId },
+            orderList: { bookId: req.params.bookId },
           },
         }
       );
