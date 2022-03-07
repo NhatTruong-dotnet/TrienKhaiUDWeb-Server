@@ -114,10 +114,10 @@ router.put("/:gmail", async (req, res) => {
   }
 });
 
-router.delete("/:gmail", async (req, res) => {
+router.delete("/:gmail/bookId", async (req, res) => {
   try {
     let newOrder = {
-      bookId: req.body.bookId,
+      bookId: req.params.bookId,
     };
     const order = await Orders.find({
       gmail: req.params.gmail,
