@@ -14,14 +14,13 @@ module.exports = function (toUser,subject, text){
         from: "admin@bookStore.com",
         to: toUser,
         subject: subject,
-        text: text
+        html: text
     }
     
     transporter.sendMail(message, function(err, info) {
         if (err) {
           console.log(err)
         } else {
-          console.log(info);
         }})
 
 }

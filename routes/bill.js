@@ -2,226 +2,121 @@ const router = require("express").Router();
 const Bills = require("../models/Bill");
 const sendMail = require("../common/email");
 const Orders = require("../models/Order");
+const Users = require("../models/User");
 router.get("/:gmail", async (req, res) => {
   // get toàn bộ đơn hàng của user
-    try {
-      const bill = await Bills.find({gmail: req.params.gmail});
-      res.status(200).json(bill);
-    } catch (error) {
-      res.status(500).json(error);
-    }
+  try {
+    const bill = await Bills.find({ gmail: req.params.gmail });
+    res.status(200).json(bill);
+  } catch (error) {
+    res.status(500).json(error);
   }
-);
+});
 
 router.get("/detail/:OrderId", async (req, res) => {
   // get detaill for bill
-    try {
-      const bill = await Orders.findById( req.params.OrderId);
-      res.status(200).json(bill);
-    } catch (error) {
-      res.status(500).json(error);
-    }
+  try {
+    const bill = await Orders.findById(req.params.OrderId);
+    res.status(200).json(bill);
+  } catch (error) {
+    res.status(500).json(error);
   }
-);
+});
 
 router.post("/", async (req, res) => {
   try {
-    function generateInvoice(){
-      return `<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-
-      <div class="page-content container">
-          <div class="page-header text-blue-d2">
-              <h1 class="page-title text-secondary-d1">
-                  Invoice
-                  <small class="page-info">
-                      <i class="fa fa-angle-double-right text-80"></i>
-                      ID: #111-222
-                  </small>
-              </h1>
-      
-              <div class="page-tools">
-                  <div class="action-buttons">
-                      <a class="btn bg-white btn-light mx-1px text-95" href="#" data-title="Print">
-                          <i class="mr-1 fa fa-print text-primary-m1 text-120 w-2"></i>
-                          Print
-                      </a>
-                      <a class="btn bg-white btn-light mx-1px text-95" href="#" data-title="PDF">
-                          <i class="mr-1 fa fa-file-pdf-o text-danger-m1 text-120 w-2"></i>
-                          Export
-                      </a>
-                  </div>
-              </div>
-          </div>
-      
-          <div class="container px-0">
-              <div class="row mt-4">
-                  <div class="col-12 col-lg-12">
-                      <div class="row">
-                          <div class="col-12">
-                              <div class="text-center text-150">
-                                  <i class="fa fa-book fa-2x text-success-m2 mr-1"></i>
-                                  <span class="text-default-d3">Bootdey.com</span>
-                              </div>
-                          </div>
-                      </div>
-                      <!-- .row -->
-      
-                      <hr class="row brc-default-l1 mx-n1 mb-4" />
-      
-                      <div class="row">
-                          <div class="col-sm-6">
-                              <div>
-                                  <span class="text-sm text-grey-m2 align-middle">To:</span>
-                                  <span class="text-600 text-110 text-blue align-middle">Alex Doe</span>
-                              </div>
-                              <div class="text-grey-m2">
-                                  <div class="my-1">
-                                      Street, City
-                                  </div>
-                                  <div class="my-1">
-                                      State, Country
-                                  </div>
-                                  <div class="my-1"><i class="fa fa-phone fa-flip-horizontal text-secondary"></i> <b class="text-600">111-111-111</b></div>
-                              </div>
-                          </div>
-                          <!-- /.col -->
-      
-                          <div class="text-95 col-sm-6 align-self-start d-sm-flex justify-content-end">
-                              <hr class="d-sm-none" />
-                              <div class="text-grey-m2">
-                                  <div class="mt-1 mb-2 text-secondary-m1 text-600 text-125">
-                                      Invoice
-                                  </div>
-      
-                                  <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">ID:</span> #111-222</div>
-      
-                                  <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Issue Date:</span> Oct 12, 2019</div>
-      
-                                  <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span class="text-600 text-90">Status:</span> <span class="badge badge-warning badge-pill px-25">Unpaid</span></div>
-                              </div>
-                          </div>
-                          <!-- /.col -->
-                      </div>
-      
-                      <div class="mt-4">
-                          <div class="row text-600 text-white bgc-default-tp1 py-25">
-                              <div class="d-none d-sm-block col-1">#</div>
-                              <div class="col-9 col-sm-5">Description</div>
-                              <div class="d-none d-sm-block col-4 col-sm-2">Qty</div>
-                              <div class="d-none d-sm-block col-sm-2">Unit Price</div>
-                              <div class="col-2">Amount</div>
-                          </div>
-      
-                          <div class="text-95 text-secondary-d3">
-                              <div class="row mb-2 mb-sm-0 py-25">
-                                  <div class="d-none d-sm-block col-1">1</div>
-                                  <div class="col-9 col-sm-5">Domain registration</div>
-                                  <div class="d-none d-sm-block col-2">2</div>
-                                  <div class="d-none d-sm-block col-2 text-95">$10</div>
-                                  <div class="col-2 text-secondary-d2">$20</div>
-                              </div>
-      
-                              <div class="row mb-2 mb-sm-0 py-25 bgc-default-l4">
-                                  <div class="d-none d-sm-block col-1">2</div>
-                                  <div class="col-9 col-sm-5">Web hosting</div>
-                                  <div class="d-none d-sm-block col-2">1</div>
-                                  <div class="d-none d-sm-block col-2 text-95">$15</div>
-                                  <div class="col-2 text-secondary-d2">$15</div>
-                              </div>
-      
-                              <div class="row mb-2 mb-sm-0 py-25">
-                                  <div class="d-none d-sm-block col-1">3</div>
-                                  <div class="col-9 col-sm-5">Software development</div>
-                                  <div class="d-none d-sm-block col-2">--</div>
-                                  <div class="d-none d-sm-block col-2 text-95">$1,000</div>
-                                  <div class="col-2 text-secondary-d2">$1,000</div>
-                              </div>
-      
-                              <div class="row mb-2 mb-sm-0 py-25 bgc-default-l4">
-                                  <div class="d-none d-sm-block col-1">4</div>
-                                  <div class="col-9 col-sm-5">Consulting</div>
-                                  <div class="d-none d-sm-block col-2">1 Year</div>
-                                  <div class="d-none d-sm-block col-2 text-95">$500</div>
-                                  <div class="col-2 text-secondary-d2">$500</div>
-                              </div>
-                          </div>
-      
-                          <div class="row border-b-2 brc-default-l2"></div>
-      
-                          <!-- or use a table instead -->
-                          <!--
-                  <div class="table-responsive">
-                      <table class="table table-striped table-borderless border-0 border-b-2 brc-default-l1">
-                          <thead class="bg-none bgc-default-tp1">
-                              <tr class="text-white">
-                                  <th class="opacity-2">#</th>
-                                  <th>Description</th>
-                                  <th>Qty</th>
-                                  <th>Unit Price</th>
-                                  <th width="140">Amount</th>
-                              </tr>
-                          </thead>
-      
-                          <tbody class="text-95 text-secondary-d3">
-                              <tr></tr>
-                              <tr>
-                                  <td>1</td>
-                                  <td>Domain registration</td>
-                                  <td>2</td>
-                                  <td class="text-95">$10</td>
-                                  <td class="text-secondary-d2">$20</td>
-                              </tr> 
-                          </tbody>
-                      </table>
-                  </div>
-                  -->
-      
-                          <div class="row mt-3">
-                              <div class="col-12 col-sm-7 text-grey-d2 text-95 mt-2 mt-lg-0">
-                                  Extra note such as company or payment information...
-                              </div>
-      
-                              <div class="col-12 col-sm-5 text-grey text-90 order-first order-sm-last">
-                                  <div class="row my-2">
-                                      <div class="col-7 text-right">
-                                          SubTotal
-                                      </div>
-                                      <div class="col-5">
-                                          <span class="text-120 text-secondary-d1">$2,250</span>
-                                      </div>
-                                  </div>
-      
-                                  <div class="row my-2">
-                                      <div class="col-7 text-right">
-                                          Tax (10%)
-                                      </div>
-                                      <div class="col-5">
-                                          <span class="text-110 text-secondary-d1">$225</span>
-                                      </div>
-                                  </div>
-      
-                                  <div class="row my-2 align-items-center bgc-primary-l3 p-2">
-                                      <div class="col-7 text-right">
-                                          Total Amount
-                                      </div>
-                                      <div class="col-5">
-                                          <span class="text-150 text-success-d3 opacity-2">$2,475</span>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-      
-                          <hr />
-      
-                          <div>
-                              <span class="text-secondary-d1 text-105">Thank you for your business</span>
-                              <a href="#" class="btn btn-info btn-bold px-4 float-right mt-3 mt-lg-0">Pay Now</a>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>`;
+    function generateInvoice(invoiceId, orderList) {
+      //https://www.bootdey.com/snippets/view/simple-invoice-receipt-email-template#html
+      function generateBody() {
+        let result = "";
+        let total = 0;
+        orderList.map((element) => {
+          result += ` <tr>
+                        <td style="padding: 5px 0;">${element.bookName}</td>
+                        <td style="padding: 5px 0;" class="alignright" width="30%">${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(element.price)}</td>
+                      </tr>`;
+          total += parseInt(element.price);
+        });
+        result += `<tr class="total">
+                    <td style="padding: 5px 0;" class="alignright" width="80%">Total</td>
+                    <td style="padding: 5px 0;" class="alignright"width="100%">${ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)}</td>
+                  </tr>`;
+        return result;
+      }
+      let body = generateBody();
+      return `<table class="body-wrap" style=" margin: 0;
+      padding: 0;
+      font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+      box-sizing: border  -box;
+      font-size: 14px;
+      background-color: #f6f6f6;
+      width: 100%;">
+      <tbody><tr>
+          <td></td>
+          <td class="container" style=" display: block !important;
+          max-width: 600px !important;
+          margin: 0 auto !important;
+          /* makes it centered */
+          clear: both !important;" width="1200">
+              <div class="content" style="  max-width: 600px;
+              margin: 0 auto;
+              display: block;
+              padding: 20px;">
+                  <table class="main" style=" background: #fff;
+                  border: 1px solid #e9e9e9;
+                  border-radius: 3px;" width="100%" cellpadding="0" cellspacing="0">
+                      <tbody><tr>
+                          <td class="content-wrap aligncenter" style=" padding: 20px;">
+                              <table width="100%" cellpadding="0" cellspacing="0">
+                                  <tbody><tr>
+                                      <td class="content-block" style="padding: 0 0 20px;">
+                                          <h2>Thanks for using our service</h2>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td class="content-block" style="padding: 0 0 20px;">
+                                          <table class="invoice" style="width:70%;  margin: 40px auto;
+                                          text-align: left;
+                                          width: 80%;">
+                                              <tbody><tr>
+                                                  <td>${req.body.gmail}<br>Invoice #${invoiceId}<br></td>
+                                              </tr>
+                                              <tr>
+                                                  <td style="padding: 5px 0;">
+                                                      <table class="invoice-items" cellpadding="0" cellspacing="0">
+                                                          <tbody>
+                                                          <td style="padding: 5px 0;">
+                                                            ${body}
+                                                          </td>
+                                                      </tbody></table>
+                                                  </td>
+                                              </tr>
+                                          </tbody></table>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td class="content-block" style="padding: 0 0 20px;">
+                                          BookStore Inc. 180 Cao Lo, Ho Chi Minh
+                                      </td>
+                                  </tr>
+                              </tbody></table>
+                          </td>
+                      </tr>
+                  </tbody></table>
+                  <div class="footer" style=" width: 100%;
+                  clear: both;
+                  color: #999;
+                  padding: 20px;">
+                      <table width="100%">
+                          <tbody><tr>
+                              <td class="aligncenter content-block">Questions? Email <a style="color: #999;font-size: 12px;" href="mailto:">support@bookstore.inc</a></td>
+                          </tr>
+                      </tbody></table>
+                  </div></div>
+          </td>
+          <td></td>
+      </tr>
+              </tbody></table>`;
     }
     let newBill = {
       orderId: req.body.orderId,
@@ -231,10 +126,13 @@ router.post("/", async (req, res) => {
     };
 
     BillSaved = await Bills.create(newBill);
-    res.status(200).json(BillSaved);
-
-
-    sendMail('builehoangnhattruong@gmail.com','test',generateInvoice())
+    let order = await Orders.findById(req.body.orderId).then((data) => {
+      let body = generateInvoice(BillSaved._id, data.orderList);
+      sendMail("builehoangnhattruong@gmail.com", "test", body);
+      data.isCheckout = true;
+      data.save();
+      res.status(200).json(data.orderList);
+    });
   } catch (error) {
     res.status(500).json(error);
     console.log(error);
@@ -259,11 +157,9 @@ router.put("/detail/updated-delivery/:OrderId", async (req, res) => {
       data[0].isDelivery = true;
       data[0].isSucessful = req.body.isSucessful;
       data[0].save();
-    }
-    )
-      res.status(200).json(bill);
-    }
-   catch (error) {
+    });
+    res.status(200).json(bill);
+  } catch (error) {
     res.status(500).json(error);
     console.log(error);
   }

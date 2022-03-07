@@ -13,7 +13,8 @@ const BookSchema = new mongoose.Schema({
     bookLayout: String,
     price: Number,
     quantityOfPage: Number,
-    describe: String
+    describe: String,
+    img: [String]
 }, { timestamps: true });
 
 module.exports = mongoose.model("Books", BookSchema, "Books");

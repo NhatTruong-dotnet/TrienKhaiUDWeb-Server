@@ -9,7 +9,6 @@ router.get("/review/:gmail", async (req, res) => {
   try {
     console.log('run');
     const user = await Books.find({"rating.gmail": req.params.gmail});
-    console.log(user);
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json(error);
