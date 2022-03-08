@@ -55,6 +55,7 @@ app.use("/api/rating-comment", ratingCommentRoute);
 app.use("/api/order", orderRoute);
 
 app.use("/api/Books", BooksRoute);
+app.use("/api/users", userRoute);
 app.use("/api/Books/Search-Price", PriceRouter);
 app.use("/api/Books/Search-Publisher", publisherRouter);
 app.use("/api/Books/Search-Suppiler", suppilerRouter);
