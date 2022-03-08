@@ -14,34 +14,45 @@ router.get("/:gmail", async (req, res) => {
 router.post("/:gmail", async (req, res) => {
   try {
     const user = await Users.find({
-      gmail: req.body.gmail,
+      gmail: req.params.gmail,
     });
     if (user[0].seenList.length < 5) {
 
      await Users.updateOne({
-        gmail: req.body.gmail,
+        gmail: req.params.gmail,
       },{
         $push:{
-          seenList: {bookId: req.body.bookId}
+          seenList: {
+            bookId: req.body.bookId,
+            price: req.body.price,
+            amount: req.body.amount,
+            bookName: req.body.bookName
+          }
         }
       })
       const user = await Users.find({
-        gmail: req.body.gmail,
+        gmail: req.params.gmail,
       });
       res.status(200).json(user);
     } else {
       try {
         const user = await Users.find({
-          gmail: req.body.gmail,
+          gmail: req.params.gmail,
         });
         let index = user[0].seenList.length - 1;
         user[0].seenList.map((element) => {
           if (index != 0) {
             user[0].seenList[index].bookId = user[0].seenList[index - 1].bookId;
+            user[0].seenList[index].price = user[0].seenList[index - 1].price;
+            user[0].seenList[index].amount = user[0].seenList[index - 1].amount;
+            user[0].seenList[index].bookName = user[0].seenList[index - 1].bookName;
             index--;
           }
         });
         user[0].seenList[0].bookId = req.body.bookId;
+        user[0].seenList[0].price = req.body.price;
+        user[0].seenList[0].amount = req.body.amount;
+        user[0].seenList[0].bookName = req.body.bookName;
         user[0].save();
         res.status(200).json(user[0].seenList);
       } catch (error) {
