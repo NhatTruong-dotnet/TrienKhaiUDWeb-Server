@@ -8,16 +8,24 @@ router.get("/:gmail", async (req, res) => {
       gmail: req.params.gmail,
       isCheckout: false,
     });
-    let returnData ={
-      data: [order[0].orderList],
-      id: order[0]._id
-    }
-    res.status(200).json(returnData);
+
+    res.status(200).json(order[0].orderList);
   } catch (error) {
     res.status(500).json(error);
   }
 });
+router.get("/id/:gmail", async (req, res) => {
+  try {
+    const order = await Orders.find({
+      gmail: req.params.gmail,
+      isCheckout: false,
+    });
 
+    res.status(200).json(order[0]._id);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 router.post("/:gmail", async (req, res) => {
   try {
     let newOrder = {
