@@ -33,13 +33,13 @@ router.post("/", async (req, res) => {
         orderList.map((element) => {
           result += ` <tr>
                         <td style="padding: 5px 0;">${element.bookName}</td>
-                        <td style="padding: 5px 0;" class="alignright" width="30%">${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(element.price)}</td>
+                        <td style="padding: 5px 0;" class="alignright" width="30%">${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(element.price * element.amount)}</td>
                       </tr>`;
-          total += parseInt(element.price);
+          total += parseInt(element.price * element.amount);
         });
         result += `<tr class="total">
                     <td style="padding: 5px 0;" class="alignright" width="80%">Total</td>
-                    <td style="padding: 5px 0;" class="alignright"width="100%">${ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)}</td>
+                    <td style="padding: 5px 0;" class="alignright"width="100%">${ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total +15000)}</td>
                   </tr>`;
         return result;
       }
