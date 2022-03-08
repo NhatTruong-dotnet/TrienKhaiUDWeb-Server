@@ -33,13 +33,27 @@ router.post("/", async (req, res) => {
         orderList.map((element) => {
           result += ` <tr>
                         <td style="padding: 5px 0;">${element.bookName}</td>
-                        <td style="padding: 5px 0;" class="alignright" width="30%">${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(element.price * element.amount)}</td>
+                        <td style="padding: 5px 0;" class="alignright" width="30%">${new Intl.NumberFormat(
+                          "vi-VN",
+                          { style: "currency", currency: "VND" }
+                        ).format(element.price * element.amount)}</td>
                       </tr>`;
           total += parseInt(element.price * element.amount);
         });
-        result += `<tr class="total">
+        result += `
+        <tr>
+        <td style="padding: 5px 0;">Phí vận chuyển</td>
+        <td style="padding: 5px 0;" class="alignright" width="30%">${new Intl.NumberFormat(
+          "vi-VN",
+          { style: "currency", currency: "VND" }
+        ).format(15000)}</td>
+      </tr>
+        <tr class="total">
                     <td style="padding: 5px 0;" class="alignright" width="80%">Total</td>
-                    <td style="padding: 5px 0;" class="alignright"width="100%">${ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total +15000)}</td>
+                    <td style="padding: 5px 0;" class="alignright"width="100%">${new Intl.NumberFormat(
+                      "vi-VN",
+                      { style: "currency", currency: "VND" }
+                    ).format(total + 15000)}</td>
                   </tr>`;
         return result;
       }
@@ -124,7 +138,7 @@ router.post("/", async (req, res) => {
       gmail: req.body.gmail,
       totalPayment: req.body.totalPayment,
       sdt: req.body.phoneNumber,
-      adress: req.body.deliveryAddress
+      adress: req.body.deliveryAddress,
     };
 
     BillSaved = await Bills.create(newBill);
