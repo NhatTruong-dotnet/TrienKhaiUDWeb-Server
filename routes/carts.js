@@ -20,7 +20,7 @@ router.post("/:gmail", async (req, res) => {
       bookId: req.body.bookId,
       price: req.body.price,
       amount: req.body.amount,
-      bookName: req.body.bookName
+      bookName: req.body.bookName,
     };
 
     const userInfo = await Users.find({
@@ -31,17 +31,29 @@ router.post("/:gmail", async (req, res) => {
       isCheckout: false,
     });
     if (order.length != 0) {
-      var savedOrders = await Orders.updateOne(
-        {
-          gmail: req.params.gmail,
-          isCheckout: false,
-        },
-        { $push: { orderList: newOrder } }
-      );
-      console.log("updated");
-      res.status(200).json(savedOrders);
+      let updateBookExist = false;
+      await Orders.find({ gmail: req.params.gmail, isCheckout: false }).then((data) => {
+        data[0].orderList.map((cartItem) => {
+          console.log('log');
+          if (cartItem.bookId === req.body.bookId) {
+            console.log('updated');
+            cartItem.amount += req.body.amount;
+            updateBookExist = true
+          }
+        })
+        data[0].save()});
+      if (!updateBookExist) {
+        console.log('insert new');
+        var savedOrders = await Orders.updateOne(
+          {
+            gmail: req.params.gmail,
+            isCheckout: false,
+          },
+          { $push: { orderList: newOrder } }
+        );
+      }
+      res.status(200).json('ok');
     } else {
-      console.log("inserted");
       let newOrder = {
         gmail: req.params.gmail,
         orderList: [
@@ -102,10 +114,10 @@ router.put("/:gmail", async (req, res) => {
   }
 });
 
-router.delete("/:gmail", async (req, res) => {
+router.delete("/:gmail/:bookId", async (req, res) => {
   try {
     let newOrder = {
-      bookId: req.body.bookId,
+      bookId: req.params.bookId,
     };
     const order = await Orders.find({
       gmail: req.params.gmail,
@@ -119,7 +131,7 @@ router.delete("/:gmail", async (req, res) => {
         },
         {
           $pull: {
-            orderList: { bookId: req.body.bookId },
+            orderList: { bookId: req.params.bookId },
           },
         }
       );
