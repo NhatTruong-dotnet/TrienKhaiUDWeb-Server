@@ -149,18 +149,16 @@ router.get("/commentSort/:_id", async(req, res) => {
             _id: req.params._id
         });
 
-        console.log("Book: ", book);
         var commentSort = [];
-        book.forEach((b) => {
+        book[0].rating.forEach((b) => {
             console.log("b:", b);
             commentSort.unshift(b);
         });
 
-        console.log("Commnet Sort: ", commentSort);
         res.status(200).json(commentSort);
 
     } catch (error) {
-        res.status(500).json(error);
+        res.status(500).json({ 'status': 500, 'messager': '_id book not exists' });
     }
 });
 
