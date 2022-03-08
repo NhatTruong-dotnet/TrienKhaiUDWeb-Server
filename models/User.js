@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const shippingAdressSchema = new mongoose.Schema({ isDefault: { type: Boolean, default: false }, address: Number });
+const shippingAdressSchema = new mongoose.Schema({ isDefault: { type: Boolean, default: false }, address: String });
 const addedPointLogSchema = new mongoose.Schema({ billID: String, addedPoint: Number });
 const seenItemSchema = new mongoose.Schema({ bookId: String });
 const wishItemSchema = new mongoose.Schema({ bookId: String });
