@@ -51,7 +51,6 @@ app.use(
 );
 app.use("/api/conversations", conversationRoute);
 
-app.use("/api/book", bookRoute);
 app.use("/api/rating-comment", ratingCommentRoute);
 app.use("/api/order", orderRoute);
 
