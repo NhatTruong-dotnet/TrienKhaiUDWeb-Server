@@ -8,7 +8,11 @@ router.get("/:gmail", async (req, res) => {
       gmail: req.params.gmail,
       isCheckout: false,
     });
-    res.status(200).json(order[0].orderList);
+    let returnData ={
+      data: [order[0].orderList],
+      id: order[0]._id
+    }
+    res.status(200).json(returnData);
   } catch (error) {
     res.status(500).json(error);
   }
