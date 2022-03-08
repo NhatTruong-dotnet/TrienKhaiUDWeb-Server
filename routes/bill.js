@@ -123,15 +123,17 @@ router.post("/", async (req, res) => {
       paymentMethod: req.body.paymentMethod,
       gmail: req.body.gmail,
       totalPayment: req.body.totalPayment,
+      sdt: req.body.phoneNumber,
+      adress: req.body.deliveryAddress
     };
 
     BillSaved = await Bills.create(newBill);
     let order = await Orders.findById(req.body.orderId).then((data) => {
       let body = generateInvoice(BillSaved._id, data.orderList);
-      sendMail("builehoangnhattruong@gmail.com", "test", body);
+      sendMail(req.body.toUser, "Hóa đơn mua hàng BookStore", body);
       data.isCheckout = true;
       data.save();
-      res.status(200).json(data.orderList);
+      res.status(200).json(body);
     });
   } catch (error) {
     res.status(500).json(error);
