@@ -6,7 +6,9 @@ var bcrypt = require("bcryptjs");
 exports.signup = (req, res) => {
     const user = new User({
         gmail: req.body.gmail,
-        passwordHash: bcrypt.hashSync(req.body.passwordHash, 8)
+        passwordHash: bcrypt.hashSync(req.body.passwordHash, 8),
+        username: req.body.username,
+        phone: req.body.phone
     });
     user.save(err => {
         if (err) {
@@ -34,7 +36,7 @@ exports.signin = (req, res) => {
                 return;
             }
             if (!user) {
-                return res.status(404).send({
+                return res.send({
                     message: "User Not found."
                 });
             }
@@ -44,8 +46,7 @@ exports.signin = (req, res) => {
                 user.passwordHash
             );
             if (!passwordIsValid) {
-                return res.status(401).send({
-                    accessToken: null,
+                return res.send({
                     message: "Invalid Password!"
                 });
             }
