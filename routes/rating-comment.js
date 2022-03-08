@@ -2,7 +2,8 @@ const router = require("express").Router();
 const { ObjectId } = require("bson");
 const { crossOriginResourcePolicy } = require("helmet");
 const Books = require("../models/Book");
-const User = require("../models/User");
+const Users = require("../models/User");
+
 
 
 router.get("/", async(req, res) => {
@@ -43,7 +44,18 @@ router.get("/:_id", async(req, res) => {
 
 router.post("/:_id", async(req, res) => {
     try {
+        const user = await Users.find({
+            gmail: req.body.gmail,
+        });
 
+        let newRating = {
+            gmail: req.body.gmail,
+            ratingValue: req.body.ratingValue,
+            commentText: req.body.commentText,
+            username: user[0].username
+        };
+
+        console.log("newRating:", newRating);
         if (req.body.ratingValue >= 1 && req.body.ratingValue <= 5) {
             const book = await Books.find({
                 _id: req.params._id,
@@ -55,17 +67,19 @@ router.post("/:_id", async(req, res) => {
                 try {
                     a.forEach((v) => {
                         var ratingList = v.rating;
-                        var checkMail = false;
-                        ratingList.forEach((i) => {
-                            if (i.gmail == req.body.gmail) {
-                                checkMail = true;
-                            }
-                        });
-                        if (checkMail) {
-                            res.status(200).json({ 'status': 400, 'message': 'Mail existed ' });
-                        } else {
-                            ratingList.push(req.body);
-                        }
+                        // var checkMail = false;
+                        // ratingList.forEach((i) => {
+                        //     if (i.gmail == req.body.gmail) {
+                        //         checkMail = true;
+                        //     }
+                        // });
+                        // if (checkMail) {
+                        //     res.status(200).json({ 'status': 400, 'message': 'Mail existed ' });
+                        // } else {
+                        //ratingList.push(req.body);
+                        // }
+
+                        ratingList.push(newRating);
                         v.save(bookI);
                     });
                     res.status(200).json({ 'status': 200, 'message': 'Add commentText Success!! ' });
@@ -129,5 +143,25 @@ router.put("/:_id", async(req, res) => {
 
 });
 
+router.get("/commentSort/:_id", async(req, res) => {
+    try {
+        const book = await Books.find({
+            _id: req.params._id
+        });
+
+        console.log("Book: ", book);
+        var commentSort = [];
+        book.forEach((b) => {
+            console.log("b:", b);
+            commentSort.unshift(b);
+        });
+
+        console.log("Commnet Sort: ", commentSort);
+        res.status(200).json(commentSort);
+
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
 
 module.exports = router;

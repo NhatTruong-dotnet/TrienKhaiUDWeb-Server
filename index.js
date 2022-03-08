@@ -22,6 +22,7 @@ const translatorRouter = require("./routes/Search-Translator");
 const CartRoute = require("./routes/carts");
 const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
+// const resetPwdRouter = require("./routes/reset-Pwd");
 
 const port = process.env.PORT || 3000;
 
@@ -64,7 +65,7 @@ app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
-
+// app.use("/api/resetPwd", resetPwdRouter);
 
 app.listen(port, () => {
     console.log("Backend server is running!");
