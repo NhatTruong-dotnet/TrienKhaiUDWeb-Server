@@ -8,7 +8,6 @@ const multer = require("multer");
 const cors = require("cors");
 const conversationRoute = require("./routes/conversations");
 const userRoute = require("./routes/users");
-const bookRoute = require("./routes/book");
 const ratingCommentRoute = require("./routes/rating-comment");
 const orderRoute = require("./routes/order");
 const cartRoute = require("./routes/carts");
