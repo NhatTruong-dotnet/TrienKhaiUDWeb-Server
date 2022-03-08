@@ -64,26 +64,15 @@ app.use("/api/Books/Search-Publisher", publisherRouter);
 app.use("/api/Books/Search-Suppiler", suppilerRouter);
 app.use("/api/Books/Search-Translator", translatorRouter);
 app.use("/api/Books/Search", SearchAllRouter);
-// app.use("/api/carts", CartRoute);
-// app.use("/api/bills", BillRoute);
-// app.use("/api/seenList", SeenList);
-
-// io.on("connection", (socket) => {
-//   console.log("a user connected");
-// })
 app.use("/api/carts", CartRoute);
 app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
 
-// const io = require("socket.io")(8900,{
-//   cors:{
-//       origin:"*"
-//   }
-// });
+app.use("/api/carts", CartRoute);
+app.use("/api/bills", BillRoute);
+app.use("/api/seenList", SeenList);
 
-// io.on("connection", (socket) => {
-//   console.log("a user connected");
-// })
+
 app.use("/api/carts", CartRoute);
 app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
