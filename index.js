@@ -3,8 +3,6 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
-const morgan = require("morgan");
-const multer = require("multer");
 const cors = require("cors");
 const conversationRoute = require("./routes/conversations");
 const userRoute = require("./routes/users");
@@ -64,15 +62,6 @@ app.use("/api/Books/Search-Publisher", publisherRouter);
 app.use("/api/Books/Search-Suppiler", suppilerRouter);
 app.use("/api/Books/Search-Translator", translatorRouter);
 app.use("/api/Books/Search", SearchAllRouter);
-app.use("/api/carts", CartRoute);
-app.use("/api/bills", BillRoute);
-app.use("/api/seenList", SeenList);
-
-app.use("/api/carts", CartRoute);
-app.use("/api/bills", BillRoute);
-app.use("/api/seenList", SeenList);
-
-
 app.use("/api/carts", CartRoute);
 app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
