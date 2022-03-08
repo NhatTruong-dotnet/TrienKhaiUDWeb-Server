@@ -53,7 +53,6 @@ router.get("/profile/:gmail", async (req, res) => {
       profilePicture: user.profilePicture,
       username: user.username,
       phone: user.phone,
-      shippingAdress: user.shippingAdress,
       isVipMember: user.isVipMember,
       addedPointLogs: user.addedPointLogs,
       currentPoint: user.currentPoint,
@@ -61,6 +60,18 @@ router.get("/profile/:gmail", async (req, res) => {
       wishList: user.wishList
     };
     res.status(200).json(USER);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+//Xem địa chỉ giao hàng
+router.get("/address/:gmail", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      gmail: req.params.gmail,
+    });
+    
+    res.status(200).json(user.shippingAdress);
   } catch (error) {
     res.status(500).json(error);
   }

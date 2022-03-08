@@ -57,13 +57,13 @@ app.use("/api/conversations", conversationRoute);
 app.use("/api/rating-comment", ratingCommentRoute);
 app.use("/api/order", orderRoute);
 
+app.use("/api/Books", BooksRoute);
+app.use("/api/users", userRoute);
 app.use("/api/Books/Search-Price", PriceRouter);
 app.use("/api/Books/Search-Publisher", publisherRouter);
 app.use("/api/Books/Search-Suppiler", suppilerRouter);
 app.use("/api/Books/Search-Translator", translatorRouter);
 app.use("/api/Books/Search", SearchAllRouter);
-
-app.use("/api/Books", BooksRoute);
 // app.use("/api/carts", CartRoute);
 // app.use("/api/bills", BillRoute);
 // app.use("/api/seenList", SeenList);
