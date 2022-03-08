@@ -1,6 +1,15 @@
 const router = require("express").Router();
 const Book = require("../models/Book");
 
+router.get("/id/:id", async (req, res) => {
+  try {
+      const books = await Book.findById(req.params.id);
+      res.status(200).json(books); 
+    }
+ catch (error) {
+    res.status(500).json(err);
+  }
+});
 router.get("/:name", async (req, res) => {
   try {
       const books = await Book.find({
