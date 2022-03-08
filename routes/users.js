@@ -70,10 +70,8 @@ router.get("/address/:gmail", async (req, res) => {
     const user = await User.findOne({
       gmail: req.params.gmail,
     });
-    const ADDRESS = {
-      shippinngAdress: user.shippingAdress
-    };
-    res.status(200).json(ADDRESS);
+    
+    res.status(200).json(user.shippingAdress);
   } catch (error) {
     res.status(500).json(error);
   }
