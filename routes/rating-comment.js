@@ -143,6 +143,8 @@ router.put("/:_id", async(req, res) => {
 
 });
 
+//sap xep comment rating theo comment moi nhat
+
 router.get("/commentSort/:_id", async(req, res) => {
     try {
         const book = await Books.find({
@@ -158,7 +160,7 @@ router.get("/commentSort/:_id", async(req, res) => {
         res.status(200).json(commentSort);
 
     } catch (error) {
-        res.status(500).json({ 'status': 500, 'messager': '_id book not exists' });
+        res.status(500).json({ 'status': 500, 'message': '_id book not exists' });
     }
 });
 
