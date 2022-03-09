@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const shippingAddressSchema = new mongoose.Schema({ isDefault: { type: Boolean, default: false }, address: Number });
+const shippingAdressSchema = new mongoose.Schema({ isDefault: { type: Boolean, default: false }, address: String });
 const addedPointLogSchema = new mongoose.Schema({ billID: String, addedPoint: Number });
 const seenItemSchema = new mongoose.Schema({ bookId: String });
 const wishItemSchema = new mongoose.Schema({ bookId: String });
@@ -7,7 +7,9 @@ const UserSchema = new mongoose.Schema({
     gmail: String,
     passwordHash: String,
     profilePicture: String,
-    shippingAddress: [shippingAddressSchema],
+    username: String,
+    phone: String,
+    shippingAdress: [shippingAdressSchema],
     isVipMember: { type: Boolean, default: false },
     addedPointLogs: [addedPointLogSchema],
     currentPoint: Number,

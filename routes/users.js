@@ -1,14 +1,18 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const Books = require("../models/Book");
-// const session = require('express-session');
+const {
+  json
+} = require("express");
 
 
 
 router.get("/review/:gmail", async (req, res) => {
   try {
     console.log('run');
-    const user = await Books.find({"rating.gmail": req.params.gmail});
+    const user = await Books.find({
+      "rating.gmail": req.params.gmail
+    });
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json(error);
@@ -17,7 +21,9 @@ router.get("/review/:gmail", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const user = await User.find({gmail:req.query.gmail});
+    const user = await User.find({
+      gmail: req.query.gmail
+    });
     // const user = await User.find({passwordHash:req.query.passwordHash});
     res.status(200).json(user);
   } catch (error) {
@@ -26,11 +32,162 @@ router.get("/", async (req, res) => {
 });
 router.post("/", async (req, res) => {
   try {
-    const user = await User.find({gmail:req.body.gmail});
+    const user = await User.find({
+      gmail: req.body.gmail
+    });
     // const user = await User.find({passwordHash:req.body.passwordHash});
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json(err);
+  }
+});
+//Xem thông tin account
+router.get("/profile/:gmail", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      gmail: req.params.gmail,
+    });
+    const USER = {
+      gmail: user.gmail,
+      profilePicture: user.profilePicture,
+      username: user.username,
+      phone: user.phone,
+      isVipMember: user.isVipMember,
+      addedPointLogs: user.addedPointLogs,
+      currentPoint: user.currentPoint,
+      seenList: user.seenList,
+      wishList: user.wishList
+    };
+    res.status(200).json(USER);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+//Xem địa chỉ giao hàng
+router.get("/address/:gmail", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      gmail: req.params.gmail,
+    });
+    res.status(200).json(user.shippingAdress);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+//Update Info Account
+router.put("/updateProfile/:gmail", async (req, res) => {
+  try {
+    const format = new RegExp("[<>#$%^*+*]");
+    if (format.test(req.body.username) == true || format.test(req.body.phone) == true || format.test(req.body.picture) == true) {
+      return res.json({
+        message: "Thông tin không hợp lệ"
+      });
+    }
+    if (req.body.username.length == 0 || req.body.phone.length == 0 || req.body.picture.length == 0) {
+      return res.json({
+        message: "Thông tin rỗng"
+      });
+    } else {
+      User.findOne({
+        gmail: req.params.gmail
+      }).exec((err, user) => {
+        if (err) {
+          res.json({
+            message: "Update Failed"
+          });
+        } else {
+          user.username = req.body.username;
+          user.phone = req.body.phone;
+          user.profilePicture = req.body.picture;
+          user.save();
+          return res.status(200).json({
+            message: "Update Completely"
+          });
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+});
+//Update shippingAdress
+router.put("/updateAddress/:gmail", async (req, res) => {
+  try {
+    if (req.body.address.length == 0 || req.body.isDefault != "true" && req.body.isDefault != "false") {
+      return res.json({
+        message: "Thông tin không hợp lệ"
+      });
+    } else {
+      User.findOne({
+        gmail: req.params.gmail
+      }).exec((err, user) => {
+        if (err) {
+          res.json({
+            message: "User not found"
+          });
+        } else {
+          //Kiểm tra isDefault đưa bào là true hay false
+          //Nếu true thì đưa thuộc tính isDefault của các địa chỉ hiện có thành false hết
+          if (req.body.isDefault == "true") {
+            user.shippingAdress.forEach((item) => {
+              item.isDefault = false;
+            });
+          }
+          user.shippingAdress.forEach((item) => {
+            if (item._id == req.body.id) {
+              item.isDefault = req.body.isDefault;
+              item.address = req.body.address;
+            }
+          });
+          user.save();
+          return res.status(200).json({
+            message: "Update Completely"
+          });
+        }
+      });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+//Add new shippingAdress
+router.put("/addAddress/:gmail", async (req, res) => {
+  try {
+    if (req.body.address.length == 0 || req.body.isDefault != "true" && req.body.isDefault != "false") {
+      return res.json({
+        message: "Thông tin không hợp lệ"
+      });
+    } else {
+      User.findOne({
+        gmail: req.params.gmail
+      }).exec((err, user) => {
+        if (err) {
+          res.json({
+            message: "User not found"
+          });
+        } else {
+          //Kiểm tra isDefault đưa bào là true hay false
+          //Nếu true thì đưa thuộc tính isDefault của các địa chỉ hiện có thành false hết
+          if (req.body.isDefault == "true") {
+            user.shippingAdress.forEach((item) => {
+              item.isDefault = false;
+            });
+          }
+          var shippingAdress = {
+            isDefault: req.body.isDefault,
+            address: req.body.address
+          };
+          user.shippingAdress.push(shippingAdress);
+          user.save();
+          return res.status(200).json({
+            message: "Add Completely"
+          });
+        }
+      });
+    }
+  } catch (error) {
+    res.status(500).json(error);
   }
 });
 
