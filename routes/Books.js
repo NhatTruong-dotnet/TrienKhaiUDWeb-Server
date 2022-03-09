@@ -26,23 +26,20 @@ router.post("/insertBook", async (req, res) => {
     console.log(error);
   }
 });
-
-router.get("/:name", async (req, res) => {
+router.get("/id/:id", async (req, res) => {
   try {
-      const books = await Book.find({
-        name: req.params.name
-        
-      });
+      const books = await Book.findById(req.params.id);
       res.status(200).json(books); 
-
     }
  catch (error) {
     res.status(500).json(err);
   }
 });
-router.get("/getID/:_id", async (req, res) => {
+router.get("/:name", async (req, res) => {
   try {
-      const books = await Book.findOne({_id: req.params._id });
+      const books = await Book.find({
+        name: req.params.name
+      });
       res.status(200).json(books); 
     }
  catch (error) {
@@ -103,8 +100,6 @@ router.put("/updateBook/:_id", async (req, res) => {
     res.status(500).json(error);
   }
 });
-
-
 router.get("/review/:id", async (req, res) => {
   try {
       const books = await Book.findById(req.params.name);
@@ -114,4 +109,5 @@ router.get("/review/:id", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 module.exports = router;
