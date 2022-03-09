@@ -6,6 +6,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const conversationRoute = require("./routes/conversations");
 const userRoute = require("./routes/users");
+const bookRoute = require("./routes/book");
 const ratingCommentRoute = require("./routes/rating-comment");
 const orderRoute = require("./routes/order");
 const cartRoute = require("./routes/carts");
@@ -52,6 +53,7 @@ app.use(
 );
 app.use("/api/conversations", conversationRoute);
 
+app.use("/api/book", bookRoute);
 app.use("/api/rating-comment", ratingCommentRoute);
 app.use("/api/order", orderRoute);
 
