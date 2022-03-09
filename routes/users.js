@@ -4,6 +4,7 @@ const Books = require("../models/Book");
 const {
   json
 } = require("express");
+// const session = require('express-session');
 
 
 
@@ -70,6 +71,10 @@ router.get("/address/:gmail", async (req, res) => {
       gmail: req.params.gmail,
     });
     res.status(200).json(user.shippingAdress);
+    const ADDRESS = {
+      shippinngAdress: user.shippingAdress
+    };
+    res.status(200).json(ADDRESS);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -177,12 +182,7 @@ router.put("/addAddress/:gmail", async (req, res) => {
           var shippingAdress = {
             isDefault: req.body.isDefault,
             address: req.body.address
-          };
-          user.shippingAdress.push(shippingAdress);
-          user.save();
-          return res.status(200).json({
-            message: "Add Completely"
-          });
+          }
         }
       });
     }
