@@ -4,7 +4,7 @@ const Book = require("../models/Book");
 router.get("/local", async (req, res) => {
   try {
       const books = await Book.find({
-        "translator": "null"});
+        "translator": "Trống"});
       res.status(200).json(books); 
   }
  catch (error) {
@@ -13,7 +13,7 @@ router.get("/local", async (req, res) => {
 });
 router.get("/global", async (req, res) => {
   try {
-      const books = await Book.find({"translator": { $ne: "null"}});
+      const books = await Book.find({"translator": { $ne: "Trống"}});
       res.status(200).json(books); 
     }
 
