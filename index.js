@@ -68,7 +68,15 @@ app.use("/api/seenList", SeenList);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
 
-
+const io = require("socket.io")(8800,{
+    cors:{
+        origin:"*"
+    }
+});
+io.on("connection", (socket) => {
+    console.log("a user connected");
+    io.emit("welcome","Hello, welcome")
+})
 app.listen(port, () => {
     console.log("Backend server is running!");
     console.log("localhost:" + port);
