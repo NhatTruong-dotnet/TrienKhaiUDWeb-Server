@@ -1,6 +1,15 @@
 const router = require("express").Router();
 const Book = require("../models/Book");
 
+router.get("/id/:id", async (req, res) => {
+  try {
+      const books = await Book.findById(req.params.id);
+      res.status(200).json(books); 
+    }
+ catch (error) {
+    res.status(500).json(err);
+  }
+});
 router.get("/:name", async (req, res) => {
   try {
       const books = await Book.find({
@@ -12,7 +21,6 @@ router.get("/:name", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 router.get("/", async (req, res) => {
   try {
       const books = await Book.find({});
@@ -23,6 +31,19 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+
+router.get("/delete/:_id", async (req, res) => {
+  try {
+      const books = await Book.deleteOne({_id: req.params._id });
+      console.log("Deleted");
+      res.status(200).json(books); 
+    }
+ catch (error) {
+    res.status(500).json(err);
+  }
+});
+
 
 router.get("/review/:id", async (req, res) => {
   try {

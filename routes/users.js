@@ -71,10 +71,6 @@ router.get("/address/:gmail", async (req, res) => {
       gmail: req.params.gmail,
     });
     res.status(200).json(user.shippingAdress);
-    const ADDRESS = {
-      shippinngAdress: user.shippingAdress
-    };
-    res.status(200).json(ADDRESS);
   } catch (error) {
     res.status(500).json(error);
   }

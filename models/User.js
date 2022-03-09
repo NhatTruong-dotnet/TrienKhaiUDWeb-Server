@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const shippingAdressSchema = new mongoose.Schema({ isDefault: { type: Boolean, default: false }, address: String });
-const shippingAdressSchema = new mongoose.Schema({ isDefault: { type: Boolean, default: false }, address: Number });
 const addedPointLogSchema = new mongoose.Schema({ billID: String, addedPoint: Number });
-const seenItemSchema = new mongoose.Schema({ bookId: String });
+const seenItemSchema = new mongoose.Schema({ bookId: String, price: Number, amount: Number, bookName: String });
 const wishItemSchema = new mongoose.Schema({ bookId: String });
 const UserSchema = new mongoose.Schema({
     gmail: String,
