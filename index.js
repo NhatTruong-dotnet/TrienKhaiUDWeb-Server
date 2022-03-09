@@ -3,8 +3,6 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const helmet = require("helmet");
-const morgan = require("morgan");
-const multer = require("multer");
 const cors = require("cors");
 const conversationRoute = require("./routes/conversations");
 const userRoute = require("./routes/users");
@@ -19,6 +17,9 @@ const PriceRouter = require("./routes/Search-Price");
 const publisherRouter = require("./routes/Search-Publisher");
 const suppilerRouter = require("./routes/Search-Suppiler");
 const translatorRouter = require("./routes/Search-Translator");
+const SearchAllRouter = require("./routes/Search");
+
+
 const CartRoute = require("./routes/carts");
 const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
@@ -57,10 +58,12 @@ app.use("/api/rating-comment", ratingCommentRoute);
 app.use("/api/order", orderRoute);
 
 app.use("/api/Books", BooksRoute);
+app.use("/api/users", userRoute);
 app.use("/api/Books/Search-Price", PriceRouter);
 app.use("/api/Books/Search-Publisher", publisherRouter);
 app.use("/api/Books/Search-Suppiler", suppilerRouter);
 app.use("/api/Books/Search-Translator", translatorRouter);
+app.use("/api/Books/Search", SearchAllRouter);
 app.use("/api/carts", CartRoute);
 app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
@@ -68,7 +71,15 @@ app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/resetpwd", resetpwdRoute);
 
-
+const io = require("socket.io")(8800,{
+    cors:{
+        origin:"*"
+    }
+});
+io.on("connection", (socket) => {
+    console.log("a user connected");
+    io.emit("welcome","Hello, welcome")
+})
 app.listen(port, () => {
     console.log("Backend server is running!");
     console.log("localhost:" + port);

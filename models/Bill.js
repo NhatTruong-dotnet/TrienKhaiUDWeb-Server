@@ -7,7 +7,9 @@ const BillSchema = new mongoose.Schema(
     isSucessful: {type:Boolean, default: false},
     paymentMethod:String,
     totalPayment: Number,
-    gmail: String
+    gmail: String,
+    sdt:String,
+    address:String
   },
   { timestamps: true }
 );
