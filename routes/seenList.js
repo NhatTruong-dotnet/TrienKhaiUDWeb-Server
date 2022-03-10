@@ -20,6 +20,7 @@ router.post("/:gmail", async (req, res) => {
       let alreadyExist = false;
       user[0].seenList.map((element)=>{
         if (element.bookId === req.body.bookId) {
+          console.log('loopp');
           alreadyExist = true;
         }
       })
