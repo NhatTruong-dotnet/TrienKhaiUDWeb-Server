@@ -44,16 +44,30 @@ router.get("/:_id", async(req, res) => {
 
 router.post("/:_id", async(req, res) => {
     try {
-        const user = await Users.find({
+        var user = await Users.find({
             gmail: req.body.gmail,
         });
 
-        let newRating = {
-            gmail: req.body.gmail,
-            ratingValue: req.body.ratingValue,
-            commentText: req.body.commentText,
-            username: user[0].username
-        };
+        console.log("user: ", user.length);
+
+        var newRating = {};
+        if (user.length != 0) {
+            newRating = {
+                gmail: req.body.gmail,
+                ratingValue: req.body.ratingValue,
+                commentText: req.body.commentText,
+                username: user[0].username
+            };
+
+        } else {
+            newRating = {
+                gmail: req.body.gmail,
+                ratingValue: req.body.ratingValue,
+                commentText: req.body.commentText,
+                username: "Người Dùng Ẩn Danh"
+            };
+        }
+
 
         console.log("newRating:", newRating);
         if (req.body.ratingValue >= 1 && req.body.ratingValue <= 5) {

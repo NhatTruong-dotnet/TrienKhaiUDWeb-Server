@@ -5,10 +5,10 @@ module.exports = function(toUser, subject, text) {
         host: "smtp.gmail.com",
         port: 465,
         auth: {
-            // user: "DH51805899@student.stu.edu.vn",
-            // pass: "181100Covid"
-            user: "ningendo.shinra03090@gmail.com",
-            pass: "dxfwloobeighjghp"
+            user: "DH51805899@student.stu.edu.vn",
+            pass: "181100Covid"
+                // user: "ningendo.shinra03090@gmail.com",
+                // pass: "dxfwloobeighjghp"
         }
     });
 
