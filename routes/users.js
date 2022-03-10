@@ -153,7 +153,7 @@ router.put("/updateAddress/:gmail", async (req, res) => {
   }
 });
 //Add new shippingAdress
-router.put("/addAddress/:gmail", async (req, res) => {
+router.post("/addAddress/:gmail", async (req, res) => {
   try {
     if (req.body.address.length == 0 || req.body.isDefault != "true" && req.body.isDefault != "false") {
       return res.json({
@@ -179,6 +179,11 @@ router.put("/addAddress/:gmail", async (req, res) => {
             isDefault: req.body.isDefault,
             address: req.body.address
           }
+          user.shippingAdress.push(shippingAdress);
+          user.save();
+          return res.status(200).json({
+            message: "Add Completely"
+          });
         }
       });
     }
