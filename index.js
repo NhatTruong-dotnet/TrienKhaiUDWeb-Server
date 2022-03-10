@@ -82,9 +82,12 @@ const addUser = (gmail, socketId) =>{
 }
 io.on("connection", (socket) => {
     console.log("a user connected");
-    socket.on("sendMessage", arg=>{
-        console.log('message');
-       io.emit("messageComing", true)
+    socket.on("sendMessage", ({messageText,userSend})=>{
+        console.log(messageText);
+        console.log(userSend);
+        socket.emit('newMessageCome',()=>{
+            "hello"
+        })
     })
 })
 app.listen(port, () => {

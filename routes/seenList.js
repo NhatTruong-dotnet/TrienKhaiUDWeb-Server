@@ -46,6 +46,13 @@ router.post("/:gmail", async (req, res) => {
         const user = await Users.find({
           gmail: req.params.gmail,
         });
+        let alreadyExist = false;
+      user[0].seenList.map((element)=>{
+        if (element.bookId === req.body.bookId) {
+          alreadyExist = true;
+        }
+      })
+      if (!alreadyExist) {
         let index = user[0].seenList.length - 1;
         user[0].seenList.map((element) => {
           if (index != 0) {
@@ -62,7 +69,9 @@ router.post("/:gmail", async (req, res) => {
         user[0].seenList[0].bookName = req.body.bookName;
         user[0].save();
         res.status(200).json(user[0].seenList);
-      } catch (error) {
+      }else{
+        res.status(200).json(user[0].seenList);
+      }} catch (error) {
         res.status(500).json(error);
         console.log(error);
       }
