@@ -24,7 +24,7 @@ const CartRoute = require("./routes/carts");
 const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
 const resetpwdRoute = require("./routes/resetpwd");
-
+const pointUserRoute = require("./routes/pointUser");
 
 const port = process.env.PORT || 3000;
 
@@ -70,22 +70,24 @@ app.use("/api/seenList", SeenList);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/resetpwd", resetpwdRoute);
+app.use("/api/pointuser", pointUserRoute);
 
-const io = require("socket.io")(8800,{
-    cors:{
-        origin:"*"
+
+const io = require("socket.io")(8800, {
+    cors: {
+        origin: "*"
     }
 });
 let users = []
-const addUser = (gmail, socketId) =>{
-    !users.some(user=>user.gmail === gmail) && users.push({gmail,socketId});
+const addUser = (gmail, socketId) => {
+    !users.some(user => user.gmail === gmail) && users.push({ gmail, socketId });
 }
 io.on("connection", (socket) => {
     console.log("a user connected");
-    socket.on("sendMessage", ({messageText,userSend})=>{
+    socket.on("sendMessage", ({ messageText, userSend }) => {
         console.log(messageText);
         console.log(userSend);
-        socket.emit('newMessageCome',()=>{
+        socket.emit('newMessageCome', () => {
             "hello"
         })
     })
