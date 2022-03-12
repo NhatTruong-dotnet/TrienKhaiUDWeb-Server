@@ -115,7 +115,7 @@ router.put("/updateProfile/:gmail", async (req, res) => {
 //Update shippingAdress
 router.put("/updateAddress/:gmail", async (req, res) => {
   try {
-    if (req.body.address.length == 0 || req.body.isDefault != "true" && req.body.isDefault != "false") {
+    if (req.body.address.length == 0 || req.body.isDefault != true && req.body.isDefault != false) {
       return res.json({
         message: "Thông tin không hợp lệ"
       });
@@ -130,7 +130,7 @@ router.put("/updateAddress/:gmail", async (req, res) => {
         } else {
           //Kiểm tra isDefault đưa bào là true hay false
           //Nếu true thì đưa thuộc tính isDefault của các địa chỉ hiện có thành false hết
-          if (req.body.isDefault == "true") {
+          if (req.body.isDefault == true) {
             user.shippingAdress.forEach((item) => {
               item.isDefault = false;
             });
@@ -155,7 +155,7 @@ router.put("/updateAddress/:gmail", async (req, res) => {
 //Add new shippingAdress
 router.post("/addAddress/:gmail", async (req, res) => {
   try {
-    if (req.body.address.length == 0 || req.body.isDefault != "true" && req.body.isDefault != "false") {
+    if (req.body.address.length == 0 || req.body.isDefault != true && req.body.isDefault != false) {
       return res.json({
         message: "Thông tin không hợp lệ"
       });
@@ -170,7 +170,7 @@ router.post("/addAddress/:gmail", async (req, res) => {
         } else {
           //Kiểm tra isDefault đưa bào là true hay false
           //Nếu true thì đưa thuộc tính isDefault của các địa chỉ hiện có thành false hết
-          if (req.body.isDefault == "true") {
+          if (req.body.isDefault == true) {
             user.shippingAdress.forEach((item) => {
               item.isDefault = false;
             });
