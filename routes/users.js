@@ -1,20 +1,28 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const Books = require("../models/Book");
-const {
-  json
-} = require("express");
+const { json } = require("express");
 // const session = require('express-session');
-
-
 
 router.get("/review/:gmail", async (req, res) => {
   try {
-    console.log('run');
-    const user = await Books.find({
-      "rating.gmail": req.params.gmail
+    let reviews = [];
+    const userReview = await Books.find({
+      "rating.gmail": req.params.gmail,
     });
-    res.status(200).json(user);
+    userReview.map((element) => {
+      let tempReview = [];
+      element.rating.map((item) => {
+        if (item.gmail === req.params.gmail) tempReview.push(item);
+      });
+      let reviewPerBook = {
+        bookName: element.name,
+        img: element.img,
+        review_detail: tempReview,
+      };
+      reviews.push(reviewPerBook);
+    });
+    res.status(200).json(reviews);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -23,7 +31,7 @@ router.get("/review/:gmail", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const user = await User.find({
-      gmail: req.query.gmail
+      gmail: req.query.gmail,
     });
     // const user = await User.find({passwordHash:req.query.passwordHash});
     res.status(200).json(user);
@@ -34,7 +42,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const user = await User.find({
-      gmail: req.body.gmail
+      gmail: req.body.gmail,
     });
     // const user = await User.find({passwordHash:req.body.passwordHash});
     res.status(200).json(user);
@@ -57,7 +65,7 @@ router.get("/profile/:gmail", async (req, res) => {
       addedPointLogs: user.addedPointLogs,
       currentPoint: user.currentPoint,
       seenList: user.seenList,
-      wishList: user.wishList
+      wishList: user.wishList,
     };
     res.status(200).json(USER);
   } catch (error) {
@@ -79,22 +87,30 @@ router.get("/address/:gmail", async (req, res) => {
 router.put("/updateProfile/:gmail", async (req, res) => {
   try {
     const format = new RegExp("[<>#$%^*+*]");
-    if (format.test(req.body.username) == true || format.test(req.body.phone) == true || format.test(req.body.picture) == true) {
+    if (
+      format.test(req.body.username) == true ||
+      format.test(req.body.phone) == true ||
+      format.test(req.body.picture) == true
+    ) {
       return res.json({
-        message: "Thông tin không hợp lệ"
+        message: "Thông tin không hợp lệ",
       });
     }
-    if (req.body.username.length == 0 || req.body.phone.length == 0 || req.body.picture.length == 0) {
+    if (
+      req.body.username.length == 0 ||
+      req.body.phone.length == 0 ||
+      req.body.picture.length == 0
+    ) {
       return res.json({
-        message: "Thông tin rỗng"
+        message: "Thông tin rỗng",
       });
     } else {
       User.findOne({
-        gmail: req.params.gmail
+        gmail: req.params.gmail,
       }).exec((err, user) => {
         if (err) {
           res.json({
-            message: "Update Failed"
+            message: "Update Failed",
           });
         } else {
           user.username = req.body.username;
@@ -102,7 +118,7 @@ router.put("/updateProfile/:gmail", async (req, res) => {
           user.profilePicture = req.body.picture;
           user.save();
           return res.status(200).json({
-            message: "Update Completely"
+            message: "Update Completely",
           });
         }
       });
@@ -115,17 +131,20 @@ router.put("/updateProfile/:gmail", async (req, res) => {
 //Update shippingAdress
 router.put("/updateAddress/:gmail", async (req, res) => {
   try {
-    if (req.body.address.length == 0 || req.body.isDefault != true && req.body.isDefault != false) {
+    if (
+      req.body.address.length == 0 ||
+      (req.body.isDefault != true && req.body.isDefault != false)
+    ) {
       return res.json({
-        message: "Thông tin không hợp lệ"
+        message: "Thông tin không hợp lệ",
       });
     } else {
       User.findOne({
-        gmail: req.params.gmail
+        gmail: req.params.gmail,
       }).exec((err, user) => {
         if (err) {
           res.json({
-            message: "User not found"
+            message: "User not found",
           });
         } else {
           //Kiểm tra isDefault đưa bào là true hay false
@@ -143,7 +162,7 @@ router.put("/updateAddress/:gmail", async (req, res) => {
           });
           user.save();
           return res.status(200).json({
-            message: "Update Completely"
+            message: "Update Completely",
           });
         }
       });
@@ -155,17 +174,20 @@ router.put("/updateAddress/:gmail", async (req, res) => {
 //Add new shippingAdress
 router.post("/addAddress/:gmail", async (req, res) => {
   try {
-    if (req.body.address.length == 0 || req.body.isDefault != true && req.body.isDefault != false) {
+    if (
+      req.body.address.length == 0 ||
+      (req.body.isDefault != true && req.body.isDefault != false)
+    ) {
       return res.json({
-        message: "Thông tin không hợp lệ"
+        message: "Thông tin không hợp lệ",
       });
     } else {
       User.findOne({
-        gmail: req.params.gmail
+        gmail: req.params.gmail,
       }).exec((err, user) => {
         if (err) {
           res.json({
-            message: "User not found"
+            message: "User not found",
           });
         } else {
           //Kiểm tra isDefault đưa bào là true hay false
@@ -177,12 +199,12 @@ router.post("/addAddress/:gmail", async (req, res) => {
           }
           var shippingAdress = {
             isDefault: req.body.isDefault,
-            address: req.body.address
-          }
+            address: req.body.address,
+          };
           user.shippingAdress.push(shippingAdress);
           user.save();
           return res.status(200).json({
-            message: "Add Completely"
+            message: "Add Completely",
           });
         }
       });
