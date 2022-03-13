@@ -155,15 +155,15 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/:status", async (req, res) => {
   try {
-    if (req.body.status === "all") {
+    if (req.params.status === "all") {
       const bill = await Bills.find();
       res.status(200).json(bill);
-    } else if (req.body.status === "success") {
+    } else if (req.params.status === "success") {
       const bill = await Bills.find({ isDelivery: true, isSucessful: true });
       res.status(200).json(bill);
-    } else if (req.body.status === "fail") {
+    } else if (req.params.status === "fail") {
       const bill = await Bills.find({ isDelivery: true, isSucessful: false });
       res.status(200).json(bill);
     } else {
