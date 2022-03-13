@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const ratingSchema = new mongoose.Schema({ gmail: String, ratingValue: Number, ratingDate: { type: Date, default: Date.now }, commentText: String })
+const ratingSchema = new mongoose.Schema({ gmail: String, ratingValue: Number, ratingDate: { type: Date, default: Date.now }, commentText: String, username: String })
 const BookSchema = new mongoose.Schema({
     name: String,
     publisher: String,
