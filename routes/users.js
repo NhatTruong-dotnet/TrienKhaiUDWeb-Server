@@ -70,30 +70,14 @@ router.get("/address/:gmail", async (req, res) => {
     const user = await User.findOne({
       gmail: req.params.gmail,
     });
-    
     res.status(200).json(user.shippingAdress);
   } catch (error) {
     res.status(500).json(error);
   }
 });
-
 //Update Info Account
 router.put("/updateProfile/:gmail", async (req, res) => {
   try {
-<<<<<<< HEAD
-    User.findOne({
-      gmail: req.params.gmail
-    }).exec((err, user) => {
-      if (err) {
-        res.status(500).json({message:"Update Failed"});
-      } else {
-        user.username = req.body.username;
-        user.phone = req.body.phone;
-        user.profilePicture = req.body.picture;
-        if(user.shippingAdress.length > 0 && user.shippingAdress.length > req.body.index){
-          if(req.body.isDefault == "true"){
-            user.shippingAdress.forEach((item)=>{
-=======
     const format = new RegExp("[<>#$%^*+*]");
     if (format.test(req.body.username) == true || format.test(req.body.phone) == true || format.test(req.body.picture) == true) {
       return res.json({
@@ -148,21 +132,18 @@ router.put("/updateAddress/:gmail", async (req, res) => {
           //Nếu true thì đưa thuộc tính isDefault của các địa chỉ hiện có thành false hết
           if (req.body.isDefault == true) {
             user.shippingAdress.forEach((item) => {
->>>>>>> Master
               item.isDefault = false;
             });
           }
-          user.shippingAdress[req.body.index].isDefault = req.body.isDefault;
-          user.shippingAdress[req.body.index].address = req.body.address;
+          user.shippingAdress.forEach((item) => {
+            if (item._id == req.body.id) {
+              item.isDefault = req.body.isDefault;
+              item.address = req.body.address;
+            }
+          });
           user.save();
           return res.status(200).json({
             message: "Update Completely"
-<<<<<<< HEAD
-          })
-        }else{
-          if(req.body.isDefault == "true"){
-            user.shippingAdress.forEach((item)=>{
-=======
           });
         }
       });
@@ -191,31 +172,21 @@ router.post("/addAddress/:gmail", async (req, res) => {
           //Nếu true thì đưa thuộc tính isDefault của các địa chỉ hiện có thành false hết
           if (req.body.isDefault == true) {
             user.shippingAdress.forEach((item) => {
->>>>>>> Master
               item.isDefault = false;
-            });  
+            });
           }
-<<<<<<< HEAD
-          var shippingAdress={
-            isDefault : req.body.isDefault,
-            address : req.body.address
-          };
-          user.shippingAdress.push(shippingAdress);
-          user.save();
-          return res.status(200).json({
-            message: "Update Completely"
-          })
-=======
+          var shippingAdress = {
+            isDefault: req.body.isDefault,
+            address: req.body.address
+          }
           user.shippingAdress.push(shippingAdress);
           user.save();
           return res.status(200).json({
             message: "Add Completely"
           });
->>>>>>> Master
         }
-        
-      }
-    });
+      });
+    }
   } catch (error) {
     res.status(500).json(error);
   }
