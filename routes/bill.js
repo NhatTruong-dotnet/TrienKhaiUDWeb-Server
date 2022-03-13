@@ -155,7 +155,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:status", async (req, res) => {
+router.get("/status/:status", async (req, res) => {
   try {
     if (req.params.status === "all") {
       const bill = await Bills.find();
