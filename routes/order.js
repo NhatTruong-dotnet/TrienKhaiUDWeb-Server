@@ -13,12 +13,9 @@ router.get("/", async(req, res) => {
 });
 
 // GetOrderByGmail(gmail)
-router.get("/:gmail", async(req, res) => {
+router.get("/:gmail/:orderId", async(req, res) => {
     try {
-        const order = await Order.find({
-            gmail: req.params.gmail,
-
-        });
+        const order = await Order.findById(req.params.orderId)
 
         res.status(200).json(order);
     } catch (error) {
