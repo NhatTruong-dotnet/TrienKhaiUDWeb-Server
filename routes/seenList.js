@@ -17,28 +17,42 @@ router.post("/:gmail", async (req, res) => {
       gmail: req.params.gmail,
     });
     if (user[0].seenList.length < 5) {
-
-     await Users.updateOne({
-        gmail: req.params.gmail,
-      },{
-        $push:{
-          seenList: {
-            bookId: req.body.bookId,
-            price: req.body.price,
-            amount: req.body.amount,
-            bookName: req.body.bookName
-          }
+      let alreadyExist = false;
+      user[0].seenList.map((element)=>{
+        if (element.bookId === req.body.bookId) {
+          alreadyExist = true;
         }
       })
-      const user = await Users.find({
-        gmail: req.params.gmail,
-      });
-      res.status(200).json(user);
+      if (!alreadyExist) {
+        await Users.updateOne({
+          gmail: req.params.gmail,
+        },{
+          $push:{
+            seenList: {
+              bookId: req.body.bookId,
+              price: req.body.price,
+              amount: req.body.amount,
+              bookName: req.body.bookName
+            }
+          }
+        })
+        const user = await Users.find({
+          gmail: req.params.gmail,
+        });
+        res.status(200).json(user);
+      }
     } else {
       try {
         const user = await Users.find({
           gmail: req.params.gmail,
         });
+        let alreadyExist = false;
+      user[0].seenList.map((element)=>{
+        if (element.bookId === req.body.bookId) {
+          alreadyExist = true;
+        }
+      })
+      if (!alreadyExist) {
         let index = user[0].seenList.length - 1;
         user[0].seenList.map((element) => {
           if (index != 0) {
@@ -55,7 +69,9 @@ router.post("/:gmail", async (req, res) => {
         user[0].seenList[0].bookName = req.body.bookName;
         user[0].save();
         res.status(200).json(user[0].seenList);
-      } catch (error) {
+      }else{
+        res.status(200).json(user[0].seenList);
+      }} catch (error) {
         res.status(500).json(error);
         console.log(error);
       }

@@ -155,10 +155,24 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/status/:status", async (req, res) => {
   try {
-    const bill = await Bills.find();
-    res.status(200).json(bill);
+    if (req.params.status === "all") {
+      console.log('tat ca');
+      const bill = await Bills.find();
+      res.status(200).json(bill);
+    } else if (req.params.status === "success") {
+      console.log('giao thanh cong');
+      const bill = await Bills.find({ isDelivery: true, isSucessful: true });
+      res.status(200).json(bill);
+    } else if (req.params.status === "fail") {
+      const bill = await Bills.find({ isDelivery: true, isSucessful: false });
+      res.status(200).json(bill);
+    } else if(req.params.status === "onway"){
+      console.log('dang giao');
+      const bill = await Bills.find({ isDelivery: false});
+      res.status(200).json(bill);
+    }
   } catch (error) {
     res.status(500).json(error);
   }

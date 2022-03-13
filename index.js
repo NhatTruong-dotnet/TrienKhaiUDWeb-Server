@@ -76,9 +76,19 @@ const io = require("socket.io")(8800,{
         origin:"*"
     }
 });
+let users = []
+const addUser = (gmail, socketId) =>{
+    !users.some(user=>user.gmail === gmail) && users.push({gmail,socketId});
+}
 io.on("connection", (socket) => {
     console.log("a user connected");
-    io.emit("welcome","Hello, welcome")
+    socket.on("sendMessage", ({messageText,userSend})=>{
+        console.log(messageText);
+        console.log(userSend);
+        socket.emit('newMessageCome',()=>{
+            "hello"
+        })
+    })
 })
 app.listen(port, () => {
     console.log("Backend server is running!");
