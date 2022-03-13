@@ -10,6 +10,7 @@ const ratingCommentRoute = require("./routes/rating-comment");
 const orderRoute = require("./routes/order");
 const cartRoute = require("./routes/carts");
 
+
 const bodyParser = require("body-parser");
 const authRoute = require("./routes/auth");
 const BooksRoute = require("./routes/Books");
@@ -67,6 +68,8 @@ app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
+
+
 
 const io = require("socket.io")(8800,{
     cors:{

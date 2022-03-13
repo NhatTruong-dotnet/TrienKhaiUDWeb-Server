@@ -19,7 +19,7 @@ router.post("/insertBook", async (req, res) => {
 
       };
       var newBookSaved = await Book.create(newBook);
-      res.status(200).json(newBookSaved);
+      res.status(200).json("Inserted");
   } catch (error) 
   {
     res.status(500).json(error);
@@ -60,7 +60,7 @@ router.get("/delete/:_id", async (req, res) => {
   try {
       const books = await Book.deleteOne({_id: req.params._id });
       console.log("Deleted");
-      res.status(200).json(books); 
+      res.status(200).json("Deleted"); 
     }
  catch (error) {
     res.status(500).json(err);
