@@ -123,7 +123,7 @@ router.put("/updateProfile/:gmail", async (req, res) => {
               message: "Thông tin không hợp lệ"
             });
           }
-          if (req.body.username.length == 0 || req.body.phone.length == 0 || req.file === undefined) {
+          if (req.body.username.length == 0 || req.body.phone.length == 0) {
             return res.json({
               message: "Thông tin rỗng"
             });
@@ -147,7 +147,9 @@ router.put("/updateProfile/:gmail", async (req, res) => {
             });
             user.username = req.body.username;
             user.phone = req.body.phone;
-            user.profilePicture = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
+            if(req.file != undefined){
+              user.profilePicture = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
+            }
             user.save();
             return res.status(200).json({
               message: "Update Completely"
