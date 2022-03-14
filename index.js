@@ -82,13 +82,11 @@ const addUser = (gmail, socketId) =>{
 }
 io.on("connection", (socket) => {
     console.log("a user connected");
-    socket.on("sendMessage", ({messageText,userSend})=>{
-        console.log(messageText);
-        console.log(userSend);
-        socket.emit('newMessageCome',()=>{
-            "hello"
-        })
+    socket.on("clientChat",()=> {
+        console.log('chat chat');
+        socket.emit('forwardToAdmin', "new message")
     })
+
 })
 app.listen(port, () => {
     console.log("Backend server is running!");
