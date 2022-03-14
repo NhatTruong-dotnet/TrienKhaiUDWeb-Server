@@ -22,6 +22,7 @@ router.get("/:gmail", async (req, res) => {
         }
       }
       let myOrders =[]
+      let total =0;
       const orders = await Orders.findById(element.orderId);
       orders.orderList.map(async (item)=> {
         let orderItemDetail ={
@@ -30,7 +31,7 @@ router.get("/:gmail", async (req, res) => {
           name: item.bookName,
           img: item.img
         }
-
+        total += item.amount * item.price
         myOrders.push(orderItemDetail)
       })
 
@@ -38,7 +39,8 @@ router.get("/:gmail", async (req, res) => {
         createdDate: element.createdAt,
         status: status,
         paymentMethod: element.paymentMethod,
-        orders_detail:myOrders
+        orders_detail:myOrders,
+        total: total
       };
       myBills.push(tempBill)
       currentIndex++;
