@@ -84,9 +84,9 @@ io.on("connection", (socket) => {
     console.log("a user connected");
     socket.on("clientChat",()=> {
         console.log('chat chat');
-        socket.emit('forwardToAdmin', "new message")
+        socket.emit('forwardToAdmin', "hello")
     })
-
+    socket.emit('forwardToAdmin', "hello")
 })
 app.listen(port, () => {
     console.log("Backend server is running!");
