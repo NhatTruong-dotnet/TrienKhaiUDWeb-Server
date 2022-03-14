@@ -1,8 +1,28 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const Books = require("../models/Book");
-const { json } = require("express");
+const Image = require("../models/Image");
+const {
+  json
+} = require("express");
 // const session = require('express-session');
+const multer = require("multer");
+const fs = require('fs');
+const path = require('path');
+//Storage
+const Storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'img')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+});
+
+const upload = multer({
+  storage: Storage
+}).single('image');
+
 
 router.get("/review/:gmail", async (req, res) => {
   try {
@@ -86,43 +106,57 @@ router.get("/address/:gmail", async (req, res) => {
 //Update Info Account
 router.put("/updateProfile/:gmail", async (req, res) => {
   try {
-    const format = new RegExp("[<>#$%^*+*]");
-    if (
-      format.test(req.body.username) == true ||
-      format.test(req.body.phone) == true ||
-      format.test(req.body.picture) == true
-    ) {
-      return res.json({
-        message: "Thông tin không hợp lệ",
-      });
-    }
-    if (
-      req.body.username.length == 0 ||
-      req.body.phone.length == 0 ||
-      req.body.picture.length == 0
-    ) {
-      return res.json({
-        message: "Thông tin rỗng",
-      });
-    } else {
-      User.findOne({
-        gmail: req.params.gmail,
-      }).exec((err, user) => {
-        if (err) {
-          res.json({
-            message: "Update Failed",
-          });
-        } else {
-          user.username = req.body.username;
-          user.phone = req.body.phone;
-          user.profilePicture = req.body.picture;
-          user.save();
-          return res.status(200).json({
-            message: "Update Completely",
-          });
-        }
-      });
-    }
+    User.findOne({
+      gmail: req.params.gmail
+    }).exec((err, user) => {
+      if (err) {
+        res.json({
+          message: "Update Failed"
+        });
+      } else {
+        upload(req, res, (err) => {
+          const format = new RegExp("[<>#$%.^*+*]");
+          if (format.test(req.body.username) == true ||
+            format.test(req.body.phone) == true ||
+            format.test(req.body.picture) == true) {
+            return res.json({
+              message: "Thông tin không hợp lệ"
+            });
+          }
+          if (req.body.username.length == 0 || req.body.phone.length == 0 || req.file === undefined) {
+            return res.json({
+              message: "Thông tin rỗng"
+            });
+          }
+          if (err) {
+            res.status(304).json(err);
+          } else {
+            const img = {
+              imgName: req.file.originalname,
+              image: {
+                data: fs.readFileSync(path.join('img/' + req.file.filename)),
+                contentType: 'image/png'
+              }
+            }
+            Image.create(img, (err, item) => {
+              if (err) {
+                res.status(401).json(err);
+              } else {
+                item.save();
+              }
+            });
+            user.username = req.body.username;
+            user.phone = req.body.phone;
+            user.profilePicture = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
+            user.save();
+            return res.status(200).json({
+              message: "Update Completely"
+            });
+          }
+        });
+
+      }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
