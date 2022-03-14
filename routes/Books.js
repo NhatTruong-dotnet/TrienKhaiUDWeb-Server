@@ -48,7 +48,9 @@ router.get("/:name", async (req, res) => {
 });
 router.get("/", async (req, res) => {
   try {
-      const books = await Book.find({});
+      const books = await Book.find({
+
+      });
       
       res.status(200).json(books); 
     }
@@ -79,8 +81,6 @@ router.put("/updateBook/:_id", async (req, res) => {
         book.suppiler = req.body.suppiler;
         book.numberInStock = req.body.numberInStock;
         book.numberDelivery = req.body.numberDelivery;
-
-
         book.author = req.body.author;
         book.translator = req.body.translator;
         book.publishYear = req.body.publishYear;
@@ -92,7 +92,7 @@ router.put("/updateBook/:_id", async (req, res) => {
         book.profilePicture = req.body.picture;
         book.save();
         return res.status(200).json({
-          message: "Update Completely"
+          message: "Update Completed"
         })
       }
     });
