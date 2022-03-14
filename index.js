@@ -18,6 +18,7 @@ const publisherRouter = require("./routes/Search-Publisher");
 const suppilerRouter = require("./routes/Search-Suppiler");
 const translatorRouter = require("./routes/Search-Translator");
 const SearchAllRouter = require("./routes/Search");
+const ImageRouter = require("./routes/images");
 
 
 const CartRoute = require("./routes/carts");
@@ -44,6 +45,7 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
 //APIs Info User
 
 //APIs Login/Register Account
@@ -69,8 +71,12 @@ app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
+
 app.use("/api/resetpwd", resetpwdRoute);
 app.use("/api/pointuser", pointUserRoute);
+
+app.use("/api/image", ImageRouter);
+
 
 
 const io = require("socket.io")(8800, {
@@ -84,13 +90,11 @@ const addUser = (gmail, socketId) => {
 }
 io.on("connection", (socket) => {
     console.log("a user connected");
-    socket.on("sendMessage", ({ messageText, userSend }) => {
-        console.log(messageText);
-        console.log(userSend);
-        socket.emit('newMessageCome', () => {
-            "hello"
-        })
+    socket.on("clientChat", () => {
+        console.log('chat chat');
+        socket.emit('forwardToAdmin', "hello")
     })
+    socket.emit('forwardToAdmin', "hello")
 })
 app.listen(port, () => {
     console.log("Backend server is running!");
