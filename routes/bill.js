@@ -3,11 +3,54 @@ const Bills = require("../models/Bill");
 const sendMail = require("../common/email");
 const Orders = require("../models/Order");
 const Users = require("../models/User");
+const Books = require("../models/Book");
 router.get("/:gmail", async (req, res) => {
   // get toàn bộ đơn hàng của user
   try {
     const bill = await Bills.find({ gmail: req.params.gmail });
-    res.status(200).json(bill);
+    let myBills = [];
+    let currentIndex = 0;
+    bill.map(async (element) => {
+      let status = "";
+      if (!element.isDelivery) {
+        status = "Đang giao";
+      } else {
+        if (element.isSucessful) {
+          status = "Giao thành công";
+        } else {
+          status = "Giao thất bại";
+        }
+      }
+      let myOrders =[]
+      let total =0;
+      const orders = await Orders.findById(element.orderId);
+      orders.orderList.map(async (item)=> {
+        let orderItemDetail ={
+          amount: item.amount,
+          price: item.price,
+          name: item.bookName,
+          img: item.img
+        }
+        total += item.amount * item.price
+        myOrders.push(orderItemDetail)
+      })
+
+      let tempBill = {
+        createdDate: element.createdAt,
+        status: status,
+        paymentMethod: element.paymentMethod,
+        orders_detail:myOrders,
+        total: total
+      };
+      myBills.push(tempBill)
+      currentIndex++;
+
+      if (currentIndex === bill.length) {
+        res.status(200).json(myBills)
+      }
+    }
+  );
+
   } catch (error) {
     res.status(500).json(error);
   }
@@ -158,19 +201,19 @@ router.post("/", async (req, res) => {
 router.get("/status/:status", async (req, res) => {
   try {
     if (req.params.status === "all") {
-      console.log('tat ca');
+      console.log("tat ca");
       const bill = await Bills.find();
       res.status(200).json(bill);
     } else if (req.params.status === "success") {
-      console.log('giao thanh cong');
+      console.log("giao thanh cong");
       const bill = await Bills.find({ isDelivery: true, isSucessful: true });
       res.status(200).json(bill);
     } else if (req.params.status === "fail") {
       const bill = await Bills.find({ isDelivery: true, isSucessful: false });
       res.status(200).json(bill);
-    } else if(req.params.status === "onway"){
-      console.log('dang giao');
-      const bill = await Bills.find({ isDelivery: false});
+    } else if (req.params.status === "onway") {
+      console.log("dang giao");
+      const bill = await Bills.find({ isDelivery: false });
       res.status(200).json(bill);
     }
   } catch (error) {
