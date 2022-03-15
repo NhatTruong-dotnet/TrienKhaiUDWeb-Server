@@ -59,6 +59,15 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+//Xem all User
+router.get("/allUser", async (req, res) => {
+  try {
+    const user = await User.find({});
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json(err);
+  }
+});
 router.post("/", async (req, res) => {
   try {
     const user = await User.find({
@@ -67,7 +76,7 @@ router.post("/", async (req, res) => {
     // const user = await User.find({passwordHash:req.body.passwordHash});
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 //Xem thông tin account
@@ -255,5 +264,23 @@ router.post("/addAddress/:gmail", async (req, res) => {
     res.status(500).json(error);
   }
 });
-
+//delete Address
+router.delete("/deleteAddress/:ID", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      gmail: req.body.gmail
+    });
+    user.shippingAdress.forEach((item) => {
+      if (item._id == req.params.ID) {
+        item.remove();
+      }
+    });
+    user.save();
+    return res.status(200).json({
+      message: "Delete Completely",
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 module.exports = router;
