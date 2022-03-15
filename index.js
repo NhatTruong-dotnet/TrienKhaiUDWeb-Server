@@ -25,7 +25,7 @@ const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
 
 const port = process.env.PORT || 3000;
-const portSocket= process.env.PORT || 8800;
+const portSocket= process.env.PORTSOCKET || 8800;
 
 dotenv.config();
 
