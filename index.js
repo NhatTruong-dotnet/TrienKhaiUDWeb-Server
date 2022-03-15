@@ -70,9 +70,13 @@ app.use("/api/seenList", SeenList);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/image", ImageRouter);
+var server = app.listen(port, () => {
+    console.log("Backend server is running!");
+    console.log("localhost:" + port);
+  });
 let adminId = [];
 let clientId = [];
-const io = require("socket.io")(portSocket, {
+const io = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
@@ -106,7 +110,4 @@ io.on("connection", (socket) => {
   })
 });
 
-app.listen(port, () => {
-  console.log("Backend server is running!");
-  console.log("localhost:" + port);
-});
+
