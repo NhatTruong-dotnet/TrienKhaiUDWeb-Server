@@ -117,8 +117,7 @@ router.put("/updateProfile/:gmail", async (req, res) => {
         upload(req, res, (err) => {
           const format = new RegExp("[<>#$%.^*+*]");
           if (format.test(req.body.username) == true ||
-            format.test(req.body.phone) == true ||
-            format.test(req.body.picture) == true) {
+            format.test(req.body.phone) == true) {
             return res.json({
               message: "Thông tin không hợp lệ"
             });
@@ -131,29 +130,36 @@ router.put("/updateProfile/:gmail", async (req, res) => {
           if (err) {
             res.status(304).json(err);
           } else {
-            const img = {
-              imgName: req.file.originalname,
-              image: {
-                data: fs.readFileSync(path.join('img/' + req.file.filename)),
-                contentType: 'image/png'
+            try {
+              const img = {
+                imgName: req.file.originalname,
+                image: {
+                  data: fs.readFileSync(path.join('img/' + req.file.filename)),
+                  contentType: 'image/png'
+                }
               }
-            }
-            Image.create(img, (err, item) => {
-              if (err) {
-                res.status(401).json(err);
-              } else {
-                item.save();
-              }
-            });
-            user.username = req.body.username;
-            user.phone = req.body.phone;
-            if(req.file != undefined){
+              Image.create(img, (err, item) => {
+                if (err) {
+                  res.status(401).json(err);
+                } else {
+                  item.save();
+                }
+              });
+              user.username = req.body.username;
+              user.phone = req.body.phone;
               user.profilePicture = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
+              user.save();
+              return res.status(200).json({
+                message: "Update Completely"
+              });
+            } catch (e) {
+              user.username = req.body.username;
+              user.phone = req.body.phone;
+              user.save();
+              return res.status(200).json({
+                message: "Update Completely"
+              });
             }
-            user.save();
-            return res.status(200).json({
-              message: "Update Completely"
-            });
           }
         });
 
