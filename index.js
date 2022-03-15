@@ -25,6 +25,7 @@ const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
 
 const port = process.env.PORT || 3000;
+const portSocket= process.env.PORT || 8800;
 
 dotenv.config();
 
@@ -71,7 +72,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/image", ImageRouter);
 let adminId = [];
 let clientId = [];
-const io = require("socket.io")(8800, {
+const io = require("socket.io")(portSocket, {
   cors: {
     origin: "*",
   },
@@ -82,6 +83,7 @@ const addUser = (gmail, socketId) => {
     users.push({ gmail, socketId });
 };
 io.on("connection", (socket) => {
+    console.log('user-connect');
   socket.on("admin-connect", () => {
     adminId = [];
     if (!adminId.includes(socket.id)) {
