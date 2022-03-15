@@ -89,12 +89,12 @@ const addUser = (gmail, socketId) => {
 io.on("connection", (socket) => {
     console.log('user-connect');
   socket.on("admin-connect", () => {
-    adminId = [];
     if (!adminId.includes(socket.id)) {
       adminId.push(socket.id);
     }
   });
   socket.on("clientChat", () => {
+    console.log('push-to-admin');
     if (!clientId.includes(socket.id)) {
       clientId.push(socket.id);
     }
@@ -103,6 +103,7 @@ io.on("connection", (socket) => {
     });
   });
   socket.on("adminChat", ()=>{
+    console.log('push-to-client');
       clientId.map((element)=>{
           console.log('emit to client');
         socket.to(element).emit("newMessageFromAdmin", "hello");
