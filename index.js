@@ -25,7 +25,7 @@ const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
 
 const port = process.env.PORT || 3000;
-const portSocket= process.env.PORTSOCKET || 8800;
+const portSocket = process.env.PORTSOCKET || 8800;
 
 dotenv.config();
 
@@ -71,9 +71,9 @@ app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/image", ImageRouter);
 var server = app.listen(port, () => {
-    console.log("Backend server is running!");
-    console.log("localhost:" + port);
-  });
+  console.log("Backend server is running!");
+  console.log("localhost:" + port);
+});
 let adminId = [];
 let clientId = [];
 const io = require("socket.io")(server, {
@@ -87,14 +87,14 @@ const addUser = (gmail, socketId) => {
     users.push({ gmail, socketId });
 };
 io.on("connection", (socket) => {
-    console.log('user-connect');
+  console.log("user-connect");
   socket.on("admin-connect", () => {
     if (!adminId.includes(socket.id)) {
       adminId.push(socket.id);
     }
   });
   socket.on("clientChat", () => {
-    console.log('push-to-admin');
+    console.log("push-to-admin");
     if (!clientId.includes(socket.id)) {
       clientId.push(socket.id);
     }
@@ -102,13 +102,11 @@ io.on("connection", (socket) => {
       socket.to(element).emit("forwardToAdmin", "hello");
     });
   });
-  socket.on("adminChat", ()=>{
-    console.log('push-to-client');
-      clientId.map((element)=>{
-          console.log('emit to client');
-        socket.to(element).emit("newMessageFromAdmin", "hello");
-      })
-  })
+  socket.on("adminChat", () => {
+    console.log("push-to-client");
+    clientId.map((element) => {
+      console.log("emit to client");
+      socket.to(element).emit("newMessageFromAdmin", "hello");
+    });
+  });
 });
-
-
