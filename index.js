@@ -88,7 +88,6 @@ io.on("connection", (socket) => {
       adminId.push(socket.id);
     }
   });
-  console.log("a user connected");
   socket.on("clientChat", () => {
     if (!clientId.includes(socket.id)) {
       clientId.push(socket.id);
@@ -97,16 +96,14 @@ io.on("connection", (socket) => {
       socket.to(element).emit("forwardToAdmin", "hello");
     });
   });
+  socket.on("adminChat", ()=>{
+      clientId.map((element)=>{
+          console.log('emit to client');
+        socket.to(element).emit("newMessageFromAdmin", "hello");
+      })
+  })
 });
-io.on("disconnect", (socket) => {
-  let indexAdmin = adminId.indexOf(socket.id);
-  indexAdmin > -1 ? adminId.splice(index, 1) : 0;
-  let indexClient = clientId.indexOf(socket.id);
-  indexClient > -1 ? clientId.splice(index, 1) : 0;
-  console.log("disconnect");
-  console.log(clientId);
-  console.log(adminId);
-});
+
 app.listen(port, () => {
   console.log("Backend server is running!");
   console.log("localhost:" + port);
