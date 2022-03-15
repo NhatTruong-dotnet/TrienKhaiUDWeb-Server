@@ -20,7 +20,6 @@ const translatorRouter = require("./routes/Search-Translator");
 const SearchAllRouter = require("./routes/Search");
 const ImageRouter = require("./routes/images");
 
-
 const CartRoute = require("./routes/carts");
 const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
@@ -30,10 +29,11 @@ const port = process.env.PORT || 3000;
 dotenv.config();
 
 mongoose.connect(
-    process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true },
-    () => {
-        console.log("Connected to MongoDB");
-    }
+  process.env.MONGO_URL,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  () => {
+    console.log("Connected to MongoDB");
+  }
 );
 
 //middleware
@@ -43,14 +43,13 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
 //APIs Info User
 
 //APIs Login/Register Account
 app.use(
-    cors({
-        origin: "*",
-    })
+  cors({
+    origin: "*",
+  })
 );
 app.use("/api/conversations", conversationRoute);
 
@@ -70,26 +69,45 @@ app.use("/api/seenList", SeenList);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/image", ImageRouter);
-
-const io = require("socket.io")(8800,{
-    cors:{
-        origin:"*"
-    }
+let adminId = [];
+let clientId = [];
+const io = require("socket.io")(8800, {
+  cors: {
+    origin: "*",
+  },
 });
-let users = []
-const addUser = (gmail, socketId) =>{
-    !users.some(user=>user.gmail === gmail) && users.push({gmail,socketId});
-}
+let users = [];
+const addUser = (gmail, socketId) => {
+  !users.some((user) => user.gmail === gmail) &&
+    users.push({ gmail, socketId });
+};
 io.on("connection", (socket) => {
-    console.log("a user connected");
-    socket.on("clientChat",()=> {
-        console.log('chat chat');
-        socket.emit('forwardToAdmin', "hello")
-    })
-    socket.emit('forwardToAdmin', "hello")
-})
+  socket.on("admin-connect", () => {
+    adminId = [];
+    if (!adminId.includes(socket.id)) {
+      adminId.push(socket.id);
+    }
+  });
+  console.log("a user connected");
+  socket.on("clientChat", () => {
+    if (!clientId.includes(socket.id)) {
+      clientId.push(socket.id);
+    }
+    adminId.map((element) => {
+      socket.to(element).emit("forwardToAdmin", "hello");
+    });
+  });
+});
+io.on("disconnect", (socket) => {
+  let indexAdmin = adminId.indexOf(socket.id);
+  indexAdmin > -1 ? adminId.splice(index, 1) : 0;
+  let indexClient = clientId.indexOf(socket.id);
+  indexClient > -1 ? clientId.splice(index, 1) : 0;
+  console.log("disconnect");
+  console.log(clientId);
+  console.log(adminId);
+});
 app.listen(port, () => {
-    console.log("Backend server is running!");
-    console.log("localhost:" + port);
-
+  console.log("Backend server is running!");
+  console.log("localhost:" + port);
 });
