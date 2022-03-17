@@ -270,17 +270,16 @@ router.delete("/deleteAddress/:ID", async (req, res) => {
     const user = await User.findOne({
       gmail: req.body.gmail
     });
-    user.shippingAdress.forEach((item) => {
-      if (item._id == req.params.ID) {
-        item.remove();
-      }
-    });
+    const address = user.shippingAdress.findIndex(item => item._id == req.params.ID);
+    user.shippingAdress[address].remove();
     user.save();
     return res.status(200).json({
       message: "Delete Completely",
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({
+      message: "Delete Error"
+    });
   }
 });
 module.exports = router;
