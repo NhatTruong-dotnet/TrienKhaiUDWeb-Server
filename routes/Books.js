@@ -27,13 +27,6 @@ const upload = multer({
 router.post("/insertBook", async (req, res) => {
   try {
     upload(req, res, (err) => {
-      if (req.file.mimetype != 'image/jpg' ||
-       req.file.mimetype != 'image/jpeg' ||
-       req.file.mimetype != 'image/png') {
-        return res.json({
-          message: "Thông tin rỗng and not vailid"
-        });
-      }
         const img = {
           imgName: req.file.originalname,
           image: {
@@ -61,7 +54,7 @@ router.post("/insertBook", async (req, res) => {
           price: req.body.price,
           quantityOfPage: req.body.quantityOfPage,
           describe: req.body.describe,
-          img : "http://localhost:3000/api/image/" + req.file.originalname,
+          img : "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname,
         };
         var newBookSaved = Book.create(newBook);
         return res.status(200).json({
@@ -85,9 +78,8 @@ router.get("/id/:id", async (req, res) => {
 });
 router.get("/:name", async (req, res) => {
   try {
-      const books = await Book.find({
-        name: req.params.name
-      });
+      const books = await Book.find( { $text: { $search: "java coffee shop" } } )
+      ;
       res.status(200).json(books); 
     }
  catch (error) {
@@ -127,14 +119,6 @@ router.put("/updateBook/:_id", async (req, res) => {
         });
       } else {
         upload(req, res, (err) => {
-          const format = new RegExp("[<>#$%.^*+*]");
-          if (req.file.mimetype != 'image/jpg' ||
-           req.file.mimetype != 'image/jpeg' || 
-           req.file.mimetype != 'image/png') {
-            return res.json({
-              message: "Thông tin rỗng and not vailid"
-            });
-          }
           if (err) {
             res.status(304).json(err);
           } else {
@@ -164,7 +148,7 @@ router.put("/updateBook/:_id", async (req, res) => {
             book.quantityOfPage = req.body.quantityOfPage;
             book.describe = req.body.describe;
             if(req.file != undefined){
-              book.img = "http://localhost:3000/api/image/" + req.file.originalname;
+              book.img = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
             }
             book.save();
             return res.status(200).json({
