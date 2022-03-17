@@ -26,6 +26,7 @@ const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
 const resetpwdRoute = require("./routes/resetpwd");
 const pointUserRoute = require("./routes/pointUser");
+const PaymentRoute = require("./routes/InStock-AddPoint");
 
 const port = process.env.PORT || 3000;
 const portSocket = process.env.PORTSOCKET || 8800;
@@ -74,6 +75,7 @@ app.use("/api/auth", authRoute);
 
 app.use("/api/resetpwd", resetpwdRoute);
 app.use("/api/pointuser", pointUserRoute);
+app.use("/api/payment", PaymentRoute);
 
 app.use("/api/image", ImageRouter);
 var server = app.listen(port, () => {
