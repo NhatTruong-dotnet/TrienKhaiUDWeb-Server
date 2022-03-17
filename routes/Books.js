@@ -78,7 +78,7 @@ router.get("/id/:id", async (req, res) => {
 });
 router.get("/:name", async (req, res) => {
   try {
-      const books = await Book.find( { $text: { $search: "java coffee shop" } } )
+      const books = await Book.find({"name" : {$regex : req.params.name}})
       ;
       res.status(200).json(books); 
     }
