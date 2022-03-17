@@ -277,9 +277,9 @@ router.delete("/deleteAddress/:ID", async (req, res) => {
       message: "Delete Completely",
     });
   } catch (error) {
-    res.status(500).json({
-      message: "Delete Error"
-    });
+    res.status(500).json(
+      error
+    );
   }
 });
 module.exports = router;
