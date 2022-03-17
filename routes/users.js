@@ -59,6 +59,15 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+//Xem all User
+router.get("/allUser", async (req, res) => {
+  try {
+    const user = await User.find({});
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json(err);
+  }
+});
 router.post("/", async (req, res) => {
   try {
     const user = await User.find({
@@ -67,7 +76,7 @@ router.post("/", async (req, res) => {
     // const user = await User.find({passwordHash:req.body.passwordHash});
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 //Xem thông tin account
@@ -117,8 +126,7 @@ router.put("/updateProfile/:gmail", async (req, res) => {
         upload(req, res, (err) => {
           const format = new RegExp("[<>#$%.^*+*]");
           if (format.test(req.body.username) == true ||
-            format.test(req.body.phone) == true ||
-            format.test(req.body.picture) == true) {
+            format.test(req.body.phone) == true) {
             return res.json({
               message: "Thông tin không hợp lệ"
             });
@@ -131,29 +139,36 @@ router.put("/updateProfile/:gmail", async (req, res) => {
           if (err) {
             res.status(304).json(err);
           } else {
-            const img = {
-              imgName: req.file.originalname,
-              image: {
-                data: fs.readFileSync(path.join('img/' + req.file.filename)),
-                contentType: 'image/png'
+            try {
+              const img = {
+                imgName: req.file.originalname,
+                image: {
+                  data: fs.readFileSync(path.join('img/' + req.file.filename)),
+                  contentType: 'image/png'
+                }
               }
+              Image.create(img, (err, item) => {
+                if (err) {
+                  res.status(401).json(err);
+                } else {
+                  item.save();
+                }
+              });
+              user.username = req.body.username;
+              user.phone = req.body.phone;
+              user.profilePicture = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
+              user.save();
+              return res.status(200).json({
+                message: "Update Completely"
+              });
+            } catch (e) {
+              user.username = req.body.username;
+              user.phone = req.body.phone;
+              user.save();
+              return res.status(200).json({
+                message: "Update Completely"
+              });
             }
-            Image.create(img, (err, item) => {
-              if (err) {
-                res.status(401).json(err);
-              } else {
-                item.save();
-              }
-            });
-            user.username = req.body.username;
-            user.phone = req.body.phone;
-            if(req.file != undefined){
-              user.profilePicture = "http://localhost:3000/api/image/" + req.file.originalname;
-            }
-            user.save();
-            return res.status(200).json({
-              message: "Update Completely"
-            });
           }
         });
 
@@ -249,5 +264,23 @@ router.post("/addAddress/:gmail", async (req, res) => {
     res.status(500).json(error);
   }
 });
-
+//delete Address
+router.delete("/deleteAddress/:ID", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      gmail: req.body.gmail
+    });
+    user.shippingAdress.forEach((item) => {
+      if (item._id == req.params.ID) {
+        item.remove();
+      }
+    });
+    user.save();
+    return res.status(200).json({
+      message: "Delete Completely",
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 module.exports = router;

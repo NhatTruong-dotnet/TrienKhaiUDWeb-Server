@@ -10,6 +10,9 @@ router.get("/:gmail", async (req, res) => {
     const bill = await Bills.find({ gmail: req.params.gmail });
     let myBills = [];
     let currentIndex = 0;
+    if (bill.length == 0) {
+      res.status(200).json([])
+    }
     bill.map(async (element) => {
       let status = "";
       if (!element.isDelivery) {

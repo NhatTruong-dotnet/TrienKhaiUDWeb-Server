@@ -21,7 +21,6 @@ const translatorRouter = require("./routes/Search-Translator");
 const SearchAllRouter = require("./routes/Search");
 const ImageRouter = require("./routes/images");
 
-
 const CartRoute = require("./routes/carts");
 const BillRoute = require("./routes/bill");
 const SeenList = require("./routes/seenList");
@@ -29,6 +28,7 @@ const resetpwdRoute = require("./routes/resetpwd");
 const pointUserRoute = require("./routes/pointUser");
 
 const port = process.env.PORT || 3000;
+const portSocket = process.env.PORTSOCKET || 8800;
 
 dotenv.config();
 
@@ -45,7 +45,6 @@ app.use(helmet());
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 //APIs Info User
 
@@ -72,30 +71,48 @@ app.use("/api/bills", BillRoute);
 app.use("/api/seenList", SeenList);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/auth", authRoute);
-app.use("/api/image", ImageRouter);
+
 app.use("/api/resetpwd", resetpwdRoute);
 app.use("/api/pointuser", pointUserRoute);
-const io = require("socket.io")(8800, {
-    cors: {
-        origin: "*"
-    }
-});
-let users = []
-const addUser = (gmail, socketId) => {
-    !users.some(user => user.gmail === gmail) && users.push({ gmail, socketId });
-}
-io.on("connection", (socket) => {
-    console.log("a user connected");
-    socket.on("sendMessage", ({ messageText, userSend }) => {
-        console.log(messageText);
-        console.log(userSend);
-        socket.emit('newMessageCome', () => {
-            "hello"
-        })
-    })
-})
-app.listen(port, () => {
+
+app.use("/api/image", ImageRouter);
+var server = app.listen(port, () => {
     console.log("Backend server is running!");
     console.log("localhost:" + port);
-
+});
+let adminId = [];
+let clientId = [];
+const io = require("socket.io")(server, {
+    cors: {
+        origin: "*",
+    },
+});
+let users = [];
+const addUser = (gmail, socketId) => {
+    !users.some((user) => user.gmail === gmail) &&
+        users.push({ gmail, socketId });
+};
+io.on("connection", (socket) => {
+    console.log("user-connect");
+    socket.on("admin-connect", () => {
+        if (!adminId.includes(socket.id)) {
+            adminId.push(socket.id);
+        }
+    });
+    socket.on("clientChat", () => {
+        console.log("push-to-admin");
+        if (!clientId.includes(socket.id)) {
+            clientId.push(socket.id);
+        }
+        adminId.map((element) => {
+            socket.to(element).emit("forwardToAdmin", "hello");
+        });
+    });
+    socket.on("adminChat", () => {
+        console.log("push-to-client");
+        clientId.map((element) => {
+            console.log("emit to client");
+            socket.to(element).emit("newMessageFromAdmin", "hello");
+        });
+    });
 });

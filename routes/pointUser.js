@@ -13,49 +13,78 @@ router.post("/", async(req, res) => {
         });
 
         var arrPayment = [];
+        var arrIdOrder = [];
         if (bill.length != 0) {
             await Bills.find({
                 gmail: req.body.gmail,
                 isDelivery: true,
                 isSucessful: true,
             }).then((b) => {
-                b.map((o) => {
+                // b.map((o) => {
+                //     if (o.isDelivery == true && o.isSucessful == true) {
+                //         if (o.totalPayment >= 500000) {
+                //             arrIdOrder.push(o._id);
+                //             arrPayment.push(o.totalPayment);
+                //             idOrderPayment._id = o._id;
+                //             idOrderPayment.totalPayment = o.totalPayment;
+                //             objIdOrderPayment.push(idOrderPayment);
+                //         }
+                //     }
+                // });
+
+                b.forEach((o) => {
                     if (o.isDelivery == true && o.isSucessful == true) {
                         if (o.totalPayment >= 500000) {
+                            arrIdOrder.push(o._id);
                             arrPayment.push(o.totalPayment);
+
                         }
                     }
                 });
             });
         }
 
+
         var user = await Users.find({
             gmail: req.body.gmail,
         }).then((u) => {
             try {
-                console.log("u: " + u);
                 u.forEach((p) => {
                     var addedPointList = p.addedPointLogs;
-                    var logPoint = {
-                        addedPoint: 0
-                    };
-                    for (let i = 0; i < arrPayment.length; i++) {
 
-                        if (arrPayment[i] >= 500000 && arrPayment[i] < 1150000) {
-                            p.currentPoint += 10;
-                            logPoint.addedPoint += 10;
-                            addedPointList.push(logPoint);
+                    arrIdOrder.forEach((v, i) => {
 
-                        } else if (arrPayment[i] >= 1150000) {
-                            p.currentPoint += 25;
-                            logPoint.addedPoint = 25;
-                            addedPointList.push(logPoint);
+                        var flag = false;
+
+                        addedPointList.forEach((a) => {
+                            var billId = a.billID;
+                            if (billId == v) {
+                                flag = true;
+                                return;
+                            }
+                        });
+                        if (!flag) {
+
+                            var newPointLog = {};
+                            newPointLog.billID = v;
+                            if (arrPayment[i] >= 500000 && arrPayment[i] < 1150000) {
+                                p.currentPoint += 10;
+                                newPointLog.addedPoint = 10;
+                            } else if (arrPayment[i] >= 1150000) {
+                                p.currentPoint += 25;
+                                newPointLog.addedPoint = 25;
+                            }
+                            addedPointList.push(newPointLog);
+
                         }
-                    }
+                    });
                     p.save(user);
+
+                    // res.status(200).json(addedPointList);
+                    res.status(200).json({ "status": 200, "message": "Add Point Success!" });
                 });
-                res.status(200).json({ "status": 200, "message": "Add point success" });
             } catch (error) {
+
                 res.status(500).json({ "status": 500, "message": "Error find user" });
             }
         });
