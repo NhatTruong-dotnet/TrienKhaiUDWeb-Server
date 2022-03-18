@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const User = require("../models/User");
 const Books = require("../models/Book");
 const Image = require("../models/Image");
 const {
@@ -8,7 +9,6 @@ const {
 const multer = require("multer");
 const fs = require('fs');
 const path = require('path');
-const Book = require("../models/Book");
 //Storage
 const Storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -49,7 +49,6 @@ router.post("/insertBook", async (req, res) => {
           if (err) {
             res.status(304).json(err);
           } else {
-            try {
               const img = {
                 imgName: req.file.originalname,
                 image: {
@@ -83,19 +82,8 @@ router.post("/insertBook", async (req, res) => {
               return res.status(200).json({
                 message: "Add Completely"
               });
-            } catch (e) {
-              let newBook = {
-                name: req.body.name,
-                img: "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname
-              };
-              var newCreateBook = Book.create(newBook);
-              return res.status(200).json({
-                message: "Add Completely"
-              });
-            }
-          }
+            } 
         });
-
       }
     });
   } catch (error) {
