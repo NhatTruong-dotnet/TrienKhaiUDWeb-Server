@@ -26,72 +26,6 @@ const upload = multer({
 
 router.post("/insertBook", async (req, res) => {
   try {
-<<<<<<< Updated upstream
-    Book.find({
-      name: req.params.name
-    }).exec((err, book) => {
-      if (err) {
-        res.json({
-          message: "Update Failed"
-        });
-      } else {
-        upload(req, res, (err) => {
-          const format = new RegExp("[<>#$%.^*+*]");
-          if (format.test(req.body.name) == true) {
-            return res.json({
-              message: "Thông tin không hợp lệ"
-            });
-          }
-          if (req.body.name.length == 0) {
-            return res.json({
-              message: "Thông tin rỗng"
-            });
-          }
-          if (err) {
-            res.status(304).json(err);
-          } else {
-              const img = {
-                imgName: req.file.originalname,
-                image: {
-                  data: fs.readFileSync(path.join('img/' + req.file.filename)),
-                  contentType: 'image/png'
-                }
-              }
-              Image.create(img, (err, item) => {
-                if (err) {
-                  res.status(401).json(err);
-                } else {
-                  item.save();
-                }
-              });
-              let newBook = {
-                name: req.body.name,
-                publisher: req.body.publisher,
-                suppiler: req.body.suppiler,
-                numberInStock: req.body.numberInStock,
-                numberDelivery: req.body.numberDelivery,
-                author: req.body.author,
-                translator: req.body.translator,
-                publishYear: req.body.publishYear,
-                bookLayout: req.body.bookLayout,
-                price: req.body.price,
-                quantityOfPage: req.body.quantityOfPage,
-                describe: req.body.describe,
-                img: "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname
-              };
-              var newCreateBook = Book.create(newBook);
-              return res.status(200).json({
-                message: "Add Completely"
-              });
-            } 
-        });
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-=======
     upload(req, res, (err) => {
         const img = {
           imgName: req.file.originalname,
@@ -132,7 +66,6 @@ router.post("/insertBook", async (req, res) => {
   res.status(500).json(error);
   console.log(error);
 }
->>>>>>> Stashed changes
 });
 router.get("/id/:id", async (req, res) => {
   try {
@@ -145,9 +78,8 @@ router.get("/id/:id", async (req, res) => {
 });
 router.get("/:name", async (req, res) => {
   try {
-      const books = await Book.find({
-        name: req.params.name
-      });
+      const books = await Book.find({name: req.params.name})
+      ;
       res.status(200).json(books); 
     }
  catch (error) {
@@ -187,20 +119,6 @@ router.put("/updateBook/:_id", async (req, res) => {
         });
       } else {
         upload(req, res, (err) => {
-<<<<<<< Updated upstream
-          const format = new RegExp("[<>#$%.^*+*]");
-          if (format.test(req.body.name) == true) {
-            return res.json({
-              message: "Thông tin không hợp lệ"
-            });
-          }
-          if (req.body.name.length == 0) {
-            return res.json({
-              message: "Thông tin rỗng"
-            });
-          }
-=======
->>>>>>> Stashed changes
           if (err) {
             res.status(304).json(err);
           } else {
@@ -231,16 +149,6 @@ router.put("/updateBook/:_id", async (req, res) => {
             book.describe = req.body.describe;
             if(req.file != undefined){
               book.img = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
-<<<<<<< Updated upstream
-              book.save();
-              return res.status(200).json({
-                message: "Update Completely"
-              });
-
-            });
-          }
-        });
-=======
             }
             book.save();
             return res.status(200).json({
@@ -249,7 +157,6 @@ router.put("/updateBook/:_id", async (req, res) => {
           }
         });
 
->>>>>>> Stashed changes
       }
     });
   } catch (error) {
