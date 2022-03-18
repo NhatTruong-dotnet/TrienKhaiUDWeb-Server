@@ -267,20 +267,32 @@ router.post("/addAddress/:gmail", async (req, res) => {
 //delete Address
 router.delete("/deleteAddress/:ID", async (req, res) => {
   try {
-    const user = await User.findOne({
+    User.findOne({
       gmail: req.body.gmail
-    });
-    user.shippingAdress.forEach((item) => {
-      if (item._id == req.params.ID) {
-        item.remove();
+    }).exec((err, user) => {
+      if (err) {
+        return res.status(401).json({
+          message: "Can not find this User"
+        });
+      } else {
+        const address = user.shippingAdress.findIndex(item => item._id == req.params.ID);
+        if (address != -1) {
+          user.shippingAdress[address].remove();
+          user.save();
+          return res.status(200).json({
+            message: "Delete Completely",
+          });
+        } else {
+          return res.status(402).json({
+            message: "This address not found",
+          });
+        }
       }
     });
-    user.save();
-    return res.status(200).json({
-      message: "Delete Completely",
-    });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(
+      error
+    );
   }
 });
 module.exports = router;
