@@ -63,7 +63,7 @@ router.post("/insertBook", async (req, res) => {
     });
 } catch (error) 
 {
-  res.status(500).json(error);
+  res.status(404).json(error);
   console.log(error);
 }
 });
@@ -161,7 +161,7 @@ router.put("/updateBook/:_id", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json(error);
+    res.status(404).json(error);
   }
 });
 router.get("/review/:id", async (req, res) => {
