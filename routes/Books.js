@@ -73,17 +73,18 @@ router.get("/id/:id", async (req, res) => {
       res.status(200).json(books); 
     }
  catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 router.get("/:name", async (req, res) => {
   try {
-      const books = await Book.find({"name" : {$regex : req.params.name}})
+      const books = await Book.find({"name" : {$regex : req.params.name.charAt(0).toUpperCase() +  req.params.name.slice(1,100)}})
       ;
       res.status(200).json(books); 
+      console.log(req.params.name.charAt(0).toUpperCase() +  req.params.name.slice(1,100))
     }
  catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 router.get("/", async (req, res) => {
@@ -95,7 +96,7 @@ router.get("/", async (req, res) => {
       res.status(200).json(books); 
     }
  catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 router.get("/delete/:_id", async (req, res) => {
@@ -105,7 +106,7 @@ router.get("/delete/:_id", async (req, res) => {
       res.status(200).json("Deleted"); 
     }
  catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 router.put("/updateBook/:_id", async (req, res) => {
