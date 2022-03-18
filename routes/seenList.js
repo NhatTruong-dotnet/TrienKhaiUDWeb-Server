@@ -68,6 +68,7 @@ router.post("/:gmail", async (req, res) => {
         user[0].seenList[0].price = req.body.price;
         user[0].seenList[0].amount = req.body.amount;
         user[0].seenList[0].bookName = req.body.bookName;
+        user[0].seenList[0].img =req.body.img
         user[0].save();
         res.status(200).json(user[0].seenList);
       }else{
