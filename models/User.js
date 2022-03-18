@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
     phone: String,
     shippingAdress: [shippingAdressSchema],
     isVipMember: { type: Boolean, default: false },
-    addedPointLogs: [addedPointLogSchema],
+    addedPointLogs: [addedPointLogSchema], 
     currentPoint: Number,
     seenList: [seenItemSchema],
     wishList: [wishItemSchema]

@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Users = require("../models/User");
 const Bills = require("../models/Bill");
 const Orders = require("../models/Order");
+const User = require("../models/User");
 
 router.post("/", async(req, res) => {
     try {
@@ -92,6 +93,26 @@ router.post("/", async(req, res) => {
         res.status(500).json({ "status": 500, "message": "Error Bill" });
     }
 });
+
+router.put("/UpdateVip/:gmail", async(req, res) => {
+    try {
+        Users.findOne({
+          gmail: req.params.gmail
+        }).exec((err, user) => {
+          if(user.currentPoint<"100"){
+            res.status(500).json({"message":"Not enough points"});
+          }else{
+            user.isVipMember = true;
+            user.save();
+            return res.status(200).json({
+              message: "Update Completely"
+            })
+          }
+        });
+      } catch (error) {
+        res.status(500).json("Update Fail");
+      }
+    });
 
 
 module.exports = router;
