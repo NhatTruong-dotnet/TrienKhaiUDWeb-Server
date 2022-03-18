@@ -39,7 +39,9 @@ router.get("/:gmail", async (req, res) => {
       })
 
       let tempBill = {
+        
         createdDate: element.createdAt,
+        billId:element._id,
         status: status,
         paymentMethod: element.paymentMethod,
         orders_detail:myOrders,
