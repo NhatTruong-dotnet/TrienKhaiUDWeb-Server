@@ -1,6 +1,5 @@
 const router = require("express").Router();
-const User = require("../models/User");
-const Books = require("../models/Book");
+const Book = require("../models/Book");
 const Image = require("../models/Image");
 const {
   json
@@ -60,7 +59,7 @@ router.post("/insertBook", async (req, res) => {
         img: "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname,
       };
       console.log(newBook);
-      var newBookSaved = Books.create(newBook);
+      var newBookSaved = Book.create(newBook);
 
       return res.status(200).json({
         newBookSaved
