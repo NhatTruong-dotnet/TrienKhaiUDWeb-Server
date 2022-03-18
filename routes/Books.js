@@ -182,6 +182,17 @@ router.put("/updateBook/:_id", async (req, res) => {
                 item.save();
               }
               book.name = req.body.name;
+              book.publisher = req.body.publisher;
+              book.suppiler = req.body.suppiler;
+              book.numberInStock = req.body.numberInStock;
+              book.numberDelivery = req.body.numberDelivery;
+              book.author = req.body.author;
+              book.translator = req.body.translator;
+              book.publishYear = req.body.publishYear;
+              book.bookLayout = req.body.bookLayout;
+              book.price = req.body.price;
+              book.quantityOfPage = req.body.quantityOfPage;
+              book.describe = req.body.describe;
               book.img = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
               book.save();
               return res.status(200).json({
