@@ -59,12 +59,15 @@ router.post("/insertBook", async (req, res) => {
         img: "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname,
       };
       console.log(newBook);
-      var newBookSaved = Book.create(newBook);
-
-      return res.status(200).json({
-        newBookSaved
+      Book.create(newBook, (err, book) => {
+        if (err) {
+          res.status(401).json(err);
+        } else {
+          book.save();
+          return res.status(200).json("Inserted");
+        }
       });
-
+    
     });
   } catch (error) {
     res.status(404).json(error);
