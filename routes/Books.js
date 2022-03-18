@@ -73,7 +73,7 @@ router.get("/id/:id", async (req, res) => {
       res.status(200).json(books); 
     }
  catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 router.get("/:name", async (req, res) => {
@@ -84,7 +84,7 @@ router.get("/:name", async (req, res) => {
       res.status(200).json(books); 
     }
  catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 router.get("/", async (req, res) => {
@@ -96,7 +96,7 @@ router.get("/", async (req, res) => {
       res.status(200).json(books); 
     }
  catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 router.get("/delete/:_id", async (req, res) => {
@@ -171,7 +171,7 @@ router.get("/review/:id", async (req, res) => {
       res.status(200).json(books.rating); 
     }
  catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
 });
 module.exports = router;
