@@ -26,46 +26,71 @@ const upload = multer({
 
 router.post("/insertBook", async (req, res) => {
   try {
-    upload(req, res, (err) => {
-        const img = {
-          imgName: req.file.originalname,
-          image: {
-            data: fs.readFileSync(path.join('img/' + req.file.filename)),
-            contentType: 'image/png'
+    Book.find({
+      name: req.params.name
+    }).exec((err, book) => {
+      if (err) {
+        res.json({
+          message: "Update Failed"
+        });
+      } else {
+        upload(req, res, (err) => {
+          const format = new RegExp("[<>#$%.^*+*]");
+          if (format.test(req.body.name) == true){
+            return res.json({
+              message: "Thông tin không hợp lệ"
+            });
           }
-        }
-        Image.create(img, (err, item) => {
+          if (req.body.name.length == 0) {
+            return res.json({
+              message: "Thông tin rỗng"
+            });
+          }
           if (err) {
-            res.status(401).json(err);
+            res.status(304).json(err);
           } else {
-            item.save();
+            try {
+              const img = {
+                imgName: req.file.originalname,
+                image: {
+                  data: fs.readFileSync(path.join('img/' + req.file.filename)),
+                  contentType: 'image/png'
+                }
+              }
+              Image.create(img, (err, item) => {
+                if (err) {
+                  res.status(401).json(err);
+                } else {
+                  item.save();
+                }
+              });
+              let newBook = {
+              name : req.body.name,
+              img : "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname
+            };
+              var newCreateBook = Book.create(newBook);
+              return res.status(200).json({
+                message: "Add Completely"
+              });
+            } catch (e) {
+              let newBook = {
+                name : req.body.name,
+                img : "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname
+              };
+              var newCreateBook = Book.create(newBook);
+              return res.status(200).json({
+                message: "Add Completely"
+              });
+            }
           }
         });
-        let newBook = {
-          name: req.body.name,
-          publisher: req.body.publisher,
-          suppiler: req.body.suppiler,
-          numberInStock: req.body.numberInStock,
-          numberDelivery: req.body.numberDelivery,
-          author: req.body.author,
-          translator: req.body.translator,
-          publishYear: req.body.publishYear,
-          bookLayout: req.body.bookLayout,
-          price: req.body.price,
-          quantityOfPage: req.body.quantityOfPage,
-          describe: req.body.describe,
-          img : "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname,
-        };
-        var newBookSaved = Book.create(newBook);
-        return res.status(200).json({
-          message: "Inserted"
-        });
+
+      }
     });
-} catch (error) 
-{
-  res.status(500).json(error);
-  console.log(error);
-}
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
 });
 router.get("/id/:id", async (req, res) => {
   try {
@@ -120,41 +145,48 @@ router.put("/updateBook/:_id", async (req, res) => {
         });
       } else {
         upload(req, res, (err) => {
+          const format = new RegExp("[<>#$%.^*+*]");
+          if (format.test(req.body.name) == true) {
+            return res.json({
+              message: "Thông tin không hợp lệ"
+            });
+          }
+          if (req.body.name.length == 0) {
+            return res.json({
+              message: "Thông tin rỗng"
+            });
+          }
           if (err) {
             res.status(304).json(err);
           } else {
-            const img = {
-              imgName: req.file.originalname,
-              image: {
-                data: fs.readFileSync(path.join('img/' + req.file.filename)),
-                contentType: 'image/png'
+            try {
+              const img = {
+                imgName: req.file.originalname,
+                image: {
+                  data: fs.readFileSync(path.join('img/' + req.file.filename)),
+                  contentType: 'image/png'
+                }
               }
-            }
-            Image.create(img, (err, item) => {
-              if (err) {
-                res.status(401).json(err);
-              } else {
-                item.save();
-              }
-            });
-            book.name = req.body.name;
-            book.publisher = req.body.publisher;
-            book.suppiler = req.body.suppiler;
-            book.numberInStock = req.body.numberInStock;
-            book.numberDelivery = req.body.numberDelivery
-            book.translator = req.body.translator;
-            book.publishYear = req.body.publishYear;
-            book.bookLayout = req.body.bookLayout;
-            book.price = req.body.price;
-            book.quantityOfPage = req.body.quantityOfPage;
-            book.describe = req.body.describe;
-            if(req.file != undefined){
+              Image.create(img, (err, item) => {
+                if (err) {
+                  res.status(401).json(err);
+                } else {
+                  item.save();
+                }
+              });
+              book.name = req.body.name;
               book.img = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
+              book.save();
+              return res.status(200).json({
+                message: "Update Completely"
+              });
+            } catch (e) {
+              book.name = req.body.name;
+              book.save();
+              return res.status(200).json({
+                message: "Update Completely"
+              });
             }
-            book.save();
-            return res.status(200).json({
-              message: "Update Completely"
-            });
           }
         });
 
