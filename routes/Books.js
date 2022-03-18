@@ -36,116 +36,6 @@ router.post("/insertBook", async (req, res) => {
       } else {
         upload(req, res, (err) => {
           const format = new RegExp("[<>#$%.^*+*]");
-          if (format.test(req.body.name) == true){
-            return res.json({
-              message: "Thông tin không hợp lệ"
-            });
-          }
-          if (req.body.name.length == 0) {
-            return res.json({
-              message: "Thông tin rỗng"
-            });
-          }
-          if (err) {
-            res.status(304).json(err);
-          } else {
-            try {
-              const img = {
-                imgName: req.file.originalname,
-                image: {
-                  data: fs.readFileSync(path.join('img/' + req.file.filename)),
-                  contentType: 'image/png'
-                }
-              }
-              Image.create(img, (err, item) => {
-                if (err) {
-                  res.status(401).json(err);
-                } else {
-                  item.save();
-                }
-              });
-              let newBook = {
-              name : req.body.name,
-              img : "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname
-            };
-              var newCreateBook = Book.create(newBook);
-              return res.status(200).json({
-                message: "Add Completely"
-              });
-            } catch (e) {
-              let newBook = {
-                name : req.body.name,
-                img : "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname
-              };
-              var newCreateBook = Book.create(newBook);
-              return res.status(200).json({
-                message: "Add Completely"
-              });
-            }
-          }
-        });
-
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-});
-router.get("/id/:id", async (req, res) => {
-  try {
-      const books = await Book.findById(req.params.id);
-      res.status(200).json(books); 
-    }
- catch (error) {
-    res.status(500).json(error);
-  }
-});
-router.get("/:name", async (req, res) => {
-  try {
-    const books = await Book.findOne({
-      name: req.params.name
-    });
-      res.status(200).json(books); 
-    }
- catch (error) {
-    res.status(500).json(error);
-  }
-});
-router.get("/", async (req, res) => {
-  try {
-      const books = await Book.find({
-
-      });
-      
-      res.status(200).json(books); 
-    }
- catch (error) {
-    res.status(500).json(error);
-  }
-});
-router.get("/delete/:_id", async (req, res) => {
-  try {
-      const books = await Book.deleteOne({_id: req.params._id });
-      console.log("Deleted");
-      res.status(200).json("Deleted"); 
-    }
- catch (error) {
-    res.status(500).json(err);
-  }
-});
-router.put("/updateBook/:_id", async (req, res) => {
-  try {
-    Book.findOne({
-      _id: req.params._id
-    }).exec((err, book) => {
-      if (err) {
-        res.json({
-          message: "Update Failed"
-        });
-      } else {
-        upload(req, res, (err) => {
-          const format = new RegExp("[<>#$%.^*+*]");
           if (format.test(req.body.name) == true) {
             return res.json({
               message: "Thông tin không hợp lệ"
@@ -174,17 +64,33 @@ router.put("/updateBook/:_id", async (req, res) => {
                   item.save();
                 }
               });
-              book.name = req.body.name;
-              book.img = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
-              book.save();
+              let newBook = {
+                name: req.body.name,
+                publisher: req.body.publisher,
+                suppiler: req.body.suppiler,
+                numberInStock: req.body.numberInStock,
+                numberDelivery: req.body.numberDelivery,
+                author: req.body.author,
+                translator: req.body.translator,
+                publishYear: req.body.publishYear,
+                bookLayout: req.body.bookLayout,
+                price: req.body.price,
+                quantityOfPage: req.body.quantityOfPage,
+                describe: req.body.describe,
+                img: "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname
+              };
+              var newCreateBook = Book.create(newBook);
               return res.status(200).json({
-                message: "Update Completely"
+                message: "Add Completely"
               });
             } catch (e) {
-              book.name = req.body.name;
-              book.save();
+              let newBook = {
+                name: req.body.name,
+                img: "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname
+              };
+              var newCreateBook = Book.create(newBook);
               return res.status(200).json({
-                message: "Update Completely"
+                message: "Add Completely"
               });
             }
           }
@@ -197,12 +103,106 @@ router.put("/updateBook/:_id", async (req, res) => {
     res.status(500).json(error);
   }
 });
+router.get("/id/:id", async (req, res) => {
+  try {
+    const books = await Book.findById(req.params.id);
+    res.status(200).json(books);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+router.get("/:name", async (req, res) => {
+  try {
+    const books = await Book.findOne({
+      name: req.params.name
+    });
+    res.status(200).json(books);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+router.get("/", async (req, res) => {
+  try {
+    const books = await Book.find({
+
+    });
+
+    res.status(200).json(books);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+router.get("/delete/:_id", async (req, res) => {
+  try {
+    const books = await Book.deleteOne({
+      _id: req.params._id
+    });
+    console.log("Deleted");
+    res.status(200).json("Deleted");
+  } catch (error) {
+    res.status(500).json(err);
+  }
+});
+router.put("/updateBook/:_id", async (req, res) => {
+  try {
+    Book.findOne({
+      _id: req.params._id
+    }).exec((err, book) => {
+      if (err) {
+        res.json({
+          message: "Update Failed"
+        });
+      } else {
+        upload(req, res, (err) => {
+          const format = new RegExp("[<>#$%.^*+*]");
+          if (format.test(req.body.name) == true) {
+            return res.json({
+              message: "Thông tin không hợp lệ"
+            });
+          }
+          if (req.body.name.length == 0) {
+            return res.json({
+              message: "Thông tin rỗng"
+            });
+          }
+          if (err) {
+            res.status(304).json(err);
+          } else {
+            const img = {
+              imgName: req.file.originalname,
+              image: {
+                data: fs.readFileSync(path.join('img/' + req.file.filename)),
+                contentType: 'image/png'
+              }
+            }
+            Image.create(img, (err, item) => {
+              if (err) {
+                res.status(401).json(err);
+              } else {
+                item.save();
+              }
+              book.name = req.body.name;
+              book.img = "https://serverbookstore.herokuapp.com/api/image/" + req.file.originalname;
+              book.save();
+              return res.status(200).json({
+                message: "Update Completely"
+              });
+
+            });
+          }
+        });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+});
 router.get("/review/:id", async (req, res) => {
   try {
-      const books = await Book.findById(req.params.name);
-      res.status(200).json(books.rating); 
-    }
- catch (error) {
+    const books = await Book.findById(req.params.name);
+    res.status(200).json(books.rating);
+  } catch (error) {
     res.status(500).json(error);
   }
 });
