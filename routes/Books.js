@@ -26,29 +26,6 @@ const upload = multer({
 
 router.post("/insertBook", async (req, res) => {
   try {
-    Book.find({
-      name: req.params.name
-    }).exec((err, book) => {
-      if (err) {
-        res.json({
-          message: "Update Failed"
-        });
-      } else {
-        upload(req, res, (err) => {
-          const format = new RegExp("[<>#$%.^*+*]");
-          if (format.test(req.body.name) == true) {
-            return res.json({
-              message: "Thông tin không hợp lệ"
-            });
-          }
-          if (req.body.name.length == 0) {
-            return res.json({
-              message: "Thông tin rỗng"
-            });
-          }
-          if (err) {
-            res.status(304).json(err);
-          } else {
               const img = {
                 imgName: req.file.originalname,
                 image: {
@@ -82,10 +59,8 @@ router.post("/insertBook", async (req, res) => {
               return res.status(200).json({
                 message: "Add Completely"
               });
-            } 
-        });
-      }
-    });
+
+
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
@@ -133,29 +108,7 @@ router.get("/delete/:_id", async (req, res) => {
 });
 router.put("/updateBook/:_id", async (req, res) => {
   try {
-    Book.findOne({
-      _id: req.params._id
-    }).exec((err, book) => {
-      if (err) {
-        res.json({
-          message: "Update Failed"
-        });
-      } else {
         upload(req, res, (err) => {
-          const format = new RegExp("[<>#$%.^*+*]");
-          if (format.test(req.body.name) == true) {
-            return res.json({
-              message: "Thông tin không hợp lệ"
-            });
-          }
-          if (req.body.name.length == 0) {
-            return res.json({
-              message: "Thông tin rỗng"
-            });
-          }
-          if (err) {
-            res.status(304).json(err);
-          } else {
             const img = {
               imgName: req.file.originalname,
               image: {
@@ -186,11 +139,7 @@ router.put("/updateBook/:_id", async (req, res) => {
               return res.status(200).json({
                 message: "Update Completely"
               });
-
-            });
-          }
         });
-      }
     });
   } catch (error) {
     console.log(error);
