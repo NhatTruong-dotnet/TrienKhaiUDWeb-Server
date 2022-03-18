@@ -61,6 +61,7 @@ router.post("/:gmail", async (req, res) => {
             user[0].seenList[index].price = user[0].seenList[index - 1].price;
             user[0].seenList[index].amount = user[0].seenList[index - 1].amount;
             user[0].seenList[index].bookName = user[0].seenList[index - 1].bookName;
+            user[0].seenList[index].img = user[0].seenList[index - 1].img;
             index--;
           }
         });
