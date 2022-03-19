@@ -146,7 +146,8 @@ router.put("/updateBook/:_id", async (req, res) => {
             book.publisher = req.body.publisher;
             book.suppiler = req.body.suppiler;
             book.numberInStock = req.body.numberInStock;
-            book.numberDelivery = req.body.numberDelivery
+            book.numberDelivery = req.body.numberDelivery;
+            book.author= req.body.author;
             book.translator = req.body.translator;
             book.publishYear = req.body.publishYear;
             book.bookLayout = req.body.bookLayout;
@@ -162,7 +163,6 @@ router.put("/updateBook/:_id", async (req, res) => {
             });
           }
         });
-
       }
     });
   } catch (error) {
