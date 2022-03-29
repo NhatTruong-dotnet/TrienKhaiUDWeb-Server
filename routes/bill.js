@@ -78,8 +78,11 @@ router.post("/", async (req, res) => {
       function generateBody() {
         let result = "";
         let total = 0;
+        
         orderList.map((element) => {
           result += ` <tr>
+          
+                        <td style="padding: 5px 0; width="120";height="120" "><img src=${element.img} alt=${element.id} /></td>
                         <td style="padding: 5px 0;">${element.bookName}</td>
                         <td style="padding: 5px 0;" class="alignright" width="30%">${new Intl.NumberFormat(
                           "vi-VN",
