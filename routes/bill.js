@@ -82,7 +82,7 @@ router.post("/", async (req, res) => {
         orderList.map((element) => {
           result += ` <tr>
           
-                        <td style="padding: 5px 0; "><img style="width="120" src=${element.img} alt=${element.id} /></td>
+                        <td style="padding: 5px 0; "><img style="width:'120px'" src=${element.img} alt=${element.id} /></td>
                         <td style="padding: 5px 0;">${element.bookName}</td>
                         <td style="padding: 5px 0;" class="alignright" width="30%">${new Intl.NumberFormat(
                           "vi-VN",
